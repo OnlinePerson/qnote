@@ -1,0 +1,1725 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>ZooBoom</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+:root {
+  --bg: #0a0a18;
+  --card-bg: rgba(14,17,38,0.9);
+  --card-border: rgba(255,255,255,0.07);
+  --primary: #7c3aed;
+  --primary-grad: linear-gradient(135deg,#7c3aed,#4f46e5);
+  --accent: #e94560;
+  --gold: #f5c518;
+  --gem: #00d4ff;
+  --green: #22c55e;
+  --orange: #f59e0b;
+  --blue: #3b82f6;
+  --text: #eef0ff;
+  --text2: #6a6a9a;
+  --radius: 16px;
+  --radius-lg: 24px;
+  --glow: 0 0 30px rgba(124,58,237,0.25);
+  --nav-h: 70px;
+  --top-h: 56px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:'Segoe UI',Tahoma,sans-serif;font-size:14px}
+body{display:flex;flex-direction:column}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--primary);border-radius:2px}
+
+/* TOP BAR */
+#topbar{position:fixed;top:0;left:0;right:0;height:var(--top-h);z-index:100;background:rgba(10,10,24,0.95);backdrop-filter:blur(20px);border-bottom:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.top-logo{font-size:20px;font-weight:800;background:var(--primary-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.top-stats{display:flex;gap:8px;align-items:center}
+.stat-chip{display:flex;align-items:center;gap:5px;background:rgba(255,255,255,0.06);border:1px solid var(--card-border);border-radius:20px;padding:5px 10px;font-size:13px;font-weight:700}
+.stat-chip .icon{font-size:16px}
+.stat-chip.coins .val{color:var(--gold)}
+.stat-chip.gems .val{color:var(--gem)}
+
+/* BOTTOM NAV */
+#bottomnav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);z-index:100;background:rgba(10,10,24,0.97);backdrop-filter:blur(30px);border-top:1px solid var(--card-border);display:flex;align-items:center;justify-content:space-around;padding:0 4px}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 10px;border-radius:12px;cursor:pointer;transition:all .2s;position:relative;min-width:50px}
+.nav-item .nav-icon{font-size:22px;transition:transform .2s}
+.nav-item .nav-label{font-size:9px;color:var(--text2);transition:color .2s;white-space:nowrap}
+.nav-item.active .nav-label{color:var(--primary)}
+.nav-item.active .nav-icon{transform:scale(1.15)}
+.nav-item.active::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:24px;height:3px;background:var(--primary-grad);border-radius:0 0 4px 4px}
+.nav-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);position:absolute;top:6px;right:8px}
+
+/* PAGES */
+#app{position:fixed;top:var(--top-h);bottom:var(--nav-h);left:0;right:0;overflow:hidden}
+.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;opacity:0;pointer-events:none;transform:translateX(20px);transition:opacity .25s,transform .25s}
+.page.active{opacity:1;pointer-events:all;transform:translateX(0)}
+.page-content{padding:16px;padding-bottom:20px;min-height:100%}
+
+/* CARDS */
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:var(--radius);backdrop-filter:blur(20px);box-shadow:var(--glow)}
+.card-hover{transition:transform .15s,box-shadow .15s}
+.card-hover:active{transform:scale(0.97);box-shadow:0 0 40px rgba(124,58,237,0.4)}
+
+/* SECTION TITLE */
+.section-title{font-size:16px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.section-title::before{content:'';width:4px;height:18px;background:var(--primary-grad);border-radius:2px}
+
+/* PROGRESS BARS */
+.prog-wrap{background:rgba(255,255,255,0.06);border-radius:20px;height:8px;overflow:hidden;position:relative}
+.prog-bar{height:100%;border-radius:20px;transition:width .5s ease}
+.prog-health{background:linear-gradient(90deg,#16a34a,#22c55e)}
+.prog-happiness{background:linear-gradient(90deg,#d97706,#f59e0b)}
+.prog-hunger{background:linear-gradient(90deg,#e94560,#f97316)}
+.prog-energy{background:linear-gradient(90deg,#2563eb,#3b82f6)}
+.prog-clean{background:linear-gradient(90deg,#0891b2,#00d4ff)}
+.prog-xp{background:var(--primary-grad)}
+.prog-mood{background:linear-gradient(90deg,#7c3aed,#ec4899)}
+.prog-clan{background:linear-gradient(90deg,#4f46e5,#7c3aed)}
+.prog-war-us{background:linear-gradient(90deg,#22c55e,#16a34a)}
+.prog-war-enemy{background:linear-gradient(90deg,#e94560,#b91c1c)}
+
+/* RARITY BADGES */
+.rarity{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}
+.rarity-common{background:rgba(100,116,139,0.3);color:#94a3b8;border:1px solid #475569}
+.rarity-uncommon{background:rgba(34,197,94,0.2);color:#4ade80;border:1px solid #16a34a}
+.rarity-rare{background:rgba(59,130,246,0.2);color:#60a5fa;border:1px solid #2563eb}
+.rarity-epic{background:rgba(124,58,237,0.3);color:#a78bfa;border:1px solid #7c3aed}
+.rarity-legendary{background:rgba(245,197,24,0.2);color:#fcd34d;border:1px solid #d97706}
+.rarity-mythic{background:rgba(233,69,96,0.25);color:#f87171;border:1px solid #dc2626}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:12px;font-size:13px;font-weight:700;cursor:pointer;border:none;transition:all .15s;position:relative;overflow:hidden;font-family:inherit}
+.btn:active{transform:scale(0.96)}
+.btn-primary{background:var(--primary-grad);color:#fff;box-shadow:0 4px 15px rgba(124,58,237,0.4)}
+.btn-accent{background:linear-gradient(135deg,#e94560,#b91c1c);color:#fff;box-shadow:0 4px 15px rgba(233,69,96,0.4)}
+.btn-gold{background:linear-gradient(135deg,#f5c518,#d97706);color:#000;box-shadow:0 4px 15px rgba(245,197,24,0.3)}
+.btn-glass{background:rgba(255,255,255,0.06);color:var(--text);border:1px solid var(--card-border)}
+.btn-sm{padding:6px 12px;font-size:12px;border-radius:8px}
+.btn-full{width:100%}
+.btn-icon{width:44px;height:44px;padding:0;border-radius:12px;font-size:20px}
+
+/* RIPPLE */
+.ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,0.3);transform:scale(0);animation:rippleAnim .5s linear}
+@keyframes rippleAnim{to{transform:scale(4);opacity:0}}
+
+/* TABS */
+.tab-bar{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--card-border);background:rgba(255,255,255,0.04);color:var(--text2);white-space:nowrap;transition:all .2s}
+.tab-btn.active{background:var(--primary-grad);color:#fff;border-color:transparent;box-shadow:0 4px 12px rgba(124,58,237,0.4)}
+
+/* SEARCH BAR */
+.search-bar{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.05);border:1px solid var(--card-border);border-radius:12px;padding:10px 14px;margin-bottom:14px}
+.search-bar input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:14px;font-family:inherit}
+.search-bar input::placeholder{color:var(--text2)}
+.search-icon{font-size:16px;color:var(--text2)}
+
+/* TOAST */
+#toast{position:fixed;bottom:calc(var(--nav-h) + 16px);left:50%;transform:translateX(-50%) translateY(20px);background:rgba(30,30,60,0.98);border:1px solid var(--primary);border-radius:12px;padding:10px 20px;font-size:13px;font-weight:600;z-index:9999;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;backdrop-filter:blur(20px)}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:500;opacity:0;pointer-events:none;transition:opacity .25s;backdrop-filter:blur(5px)}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{position:fixed;bottom:0;left:0;right:0;background:linear-gradient(180deg,rgba(20,20,50,0.99),rgba(10,10,24,0.99));border-radius:var(--radius-lg) var(--radius-lg) 0 0;z-index:501;padding:24px 20px 32px;transform:translateY(100%);transition:transform .3s ease;max-height:85vh;overflow-y:auto}
+.modal.open{transform:translateY(0)}
+.modal-handle{width:40px;height:4px;background:rgba(255,255,255,0.15);border-radius:2px;margin:0 auto 20px}
+.modal-title{font-size:18px;font-weight:800;margin-bottom:16px;text-align:center}
+
+/* STAT ROW */
+.stat-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.stat-row .label{font-size:12px;color:var(--text2);width:65px;text-align:right;flex-shrink:0}
+.stat-row .prog-wrap{flex:1}
+.stat-row .val{font-size:12px;font-weight:700;width:32px;text-align:left;flex-shrink:0}
+
+/* ANIMAL GRID */
+.animal-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.animal-card{padding:14px;cursor:pointer;transition:all .2s}
+.animal-card:active{transform:scale(0.96)}
+.animal-emoji-wrap{text-align:center;font-size:56px;line-height:1;margin-bottom:10px;position:relative}
+.animal-emoji-wrap .level-badge{position:absolute;top:-4px;right:-4px;background:var(--primary-grad);color:#fff;font-size:10px;font-weight:800;width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.animal-name{font-size:14px;font-weight:700;text-align:center;margin-bottom:4px}
+.animal-nickname{font-size:11px;color:var(--text2);text-align:center;margin-bottom:8px}
+.animal-bars{display:flex;flex-direction:column;gap:5px}
+.mini-bar-row{display:flex;align-items:center;gap:6px}
+.mini-bar-icon{font-size:11px;width:14px;text-align:center}
+.mini-bar{flex:1;height:5px;background:rgba(255,255,255,0.08);border-radius:10px;overflow:hidden}
+.mini-bar-fill{height:100%;border-radius:10px}
+
+/* FARM LANDSCAPE */
+.farm-banner{border-radius:var(--radius);overflow:hidden;margin-bottom:16px;position:relative;height:160px;background:linear-gradient(180deg,#0d2340 0%,#1a4a2e 60%,#2d6a4f 100%)}
+.farm-sky{position:absolute;top:0;left:0;right:0;height:65%;background:linear-gradient(180deg,#0d1b33,#1e3a5f)}
+.farm-stars{position:absolute;top:0;left:0;right:0;height:60%;overflow:hidden}
+.star{position:absolute;background:#fff;border-radius:50%;animation:twinkle 2s infinite alternate}
+@keyframes twinkle{from{opacity:.3}to{opacity:1}}
+.farm-ground{position:absolute;bottom:0;left:0;right:0;height:45%;background:linear-gradient(180deg,#2d6a4f,#1a4a2e);border-radius:50% 50% 0 0 / 20px 20px 0 0}
+.farm-trees{position:absolute;bottom:30%;left:0;right:0;display:flex;justify-content:space-around;font-size:32px;line-height:1}
+.farm-title-overlay{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.farm-title-overlay h2{font-size:22px;font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,0.8)}
+.farm-title-overlay p{font-size:12px;color:rgba(255,255,255,0.7)}
+.farm-moon{position:absolute;top:14px;left:20px;font-size:28px}
+.farm-animals-row{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;gap:8px;font-size:24px}
+
+/* VISITORS */
+.friend-card{display:flex;align-items:center;gap:12px;padding:12px 14px;margin-bottom:10px}
+.friend-avatar{width:48px;height:48px;border-radius:50%;background:var(--primary-grad);display:flex;align-items:center;justify-content:center;font-size:24px;position:relative;flex-shrink:0}
+.online-dot{width:12px;height:12px;border-radius:50%;background:#22c55e;border:2px solid var(--bg);position:absolute;bottom:0;right:0}
+.offline-dot{background:#6a6a9a}
+.friend-info{flex:1}
+.friend-name{font-size:14px;font-weight:700;margin-bottom:2px}
+.friend-meta{font-size:11px;color:var(--text2)}
+
+/* ADVENTURE MAP */
+.adv-map{border-radius:var(--radius);overflow:hidden;margin-bottom:16px;position:relative;height:200px;background:linear-gradient(135deg,#0a1a0a,#0d2b0d,#0a1a0a)}
+.adv-path{position:absolute;bottom:20%;left:10%;right:10%;height:4px;background:rgba(255,255,255,0.1);border-radius:2px}
+.adv-path::before{content:'';position:absolute;left:0;top:0;width:60%;height:100%;background:var(--primary-grad);border-radius:2px}
+.adv-trees{position:absolute;inset:0;font-size:22px;display:flex;flex-wrap:wrap;gap:8px;padding:10px;align-items:center;pointer-events:none;opacity:0.6}
+.adv-boss{position:absolute;top:50%;right:15%;transform:translateY(-50%);background:rgba(233,69,96,0.2);border:2px solid var(--accent);border-radius:12px;padding:8px 12px;text-align:center}
+.adv-boss .boss-emoji{font-size:32px}
+.adv-boss .boss-label{font-size:10px;font-weight:800;color:var(--accent);letter-spacing:1px}
+.adv-hero{position:absolute;top:50%;left:15%;transform:translateY(-50%);font-size:36px;animation:heroFloat 2s ease-in-out infinite}
+@keyframes heroFloat{0%,100%{transform:translateY(-50%)}50%{transform:translateY(calc(-50% - 6px))}}
+
+/* SETTINGS */
+.setting-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--card-border)}
+.setting-row:last-child{border-bottom:none}
+.setting-label{display:flex;align-items:center;gap:10px;font-size:14px}
+.setting-icon{font-size:20px;width:28px;text-align:center}
+/* TOGGLE */
+.toggle{width:46px;height:26px;background:rgba(255,255,255,0.1);border-radius:13px;position:relative;cursor:pointer;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--primary)}
+.toggle::after{content:'';width:20px;height:20px;background:#fff;border-radius:50%;position:absolute;top:3px;right:3px;transition:transform .2s;box-shadow:0 2px 4px rgba(0,0,0,0.3)}
+.toggle.on::after{transform:translateX(-20px)}
+
+/* CLAN */
+.clan-banner{border-radius:var(--radius);padding:20px;text-align:center;background:linear-gradient(135deg,rgba(124,58,237,0.3),rgba(79,70,229,0.3));border:1px solid rgba(124,58,237,0.4);margin-bottom:16px;position:relative;overflow:hidden}
+.clan-banner::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% 0%,rgba(124,58,237,0.3),transparent 70%)}
+.clan-emoji{font-size:48px;margin-bottom:8px}
+.clan-name{font-size:20px;font-weight:900}
+.clan-meta{font-size:12px;color:var(--text2);margin-top:4px}
+.member-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--card-border)}
+.member-row:last-child{border-bottom:none}
+.member-avatar{font-size:28px;width:40px;text-align:center}
+.member-info{flex:1}
+.member-name{font-size:14px;font-weight:600}
+.member-role{font-size:11px;color:var(--text2);margin-top:1px}
+.role-badge{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:700}
+.role-leader{background:rgba(245,197,24,0.2);color:var(--gold)}
+.role-vice{background:rgba(233,69,96,0.2);color:var(--accent)}
+.role-member{background:rgba(106,106,154,0.2);color:var(--text2)}
+
+/* WAR */
+.war-vs{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.war-clan-side{flex:1;text-align:center}
+.war-clan-emoji{font-size:48px;margin-bottom:6px}
+.war-clan-name{font-size:13px;font-weight:700}
+.war-score{font-size:22px;font-weight:900;margin-top:4px}
+.war-vs-text{font-size:20px;font-weight:900;color:var(--accent);text-shadow:0 0 20px rgba(233,69,96,0.5);padding:0 12px}
+.war-bars{margin-bottom:16px}
+.war-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.war-bar-label{font-size:12px;color:var(--text2);width:80px;text-align:right;flex-shrink:0}
+.war-timer{text-align:center;padding:12px;background:rgba(233,69,96,0.1);border:1px solid rgba(233,69,96,0.3);border-radius:12px;margin-bottom:16px}
+.timer-val{font-size:28px;font-weight:900;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:2px}
+.timer-label{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* CHAT PREVIEW */
+.chat-msg{display:flex;align-items:flex-start;gap:8px;margin-bottom:8px}
+.chat-avatar{font-size:18px;width:28px;height:28px;background:rgba(124,58,237,0.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-bubble{background:rgba(255,255,255,0.05);border-radius:0 12px 12px 12px;padding:8px 12px;flex:1}
+.chat-user{font-size:11px;color:var(--primary);font-weight:700;margin-bottom:2px}
+.chat-text{font-size:13px}
+.chat-time{font-size:10px;color:var(--text2);margin-top:2px}
+
+/* DETAIL PAGE */
+.detail-hero{text-align:center;padding:20px 0 10px;position:relative}
+.detail-emoji{font-size:100px;line-height:1;display:block;filter:drop-shadow(0 0 30px rgba(124,58,237,0.4));animation:petFloat 3s ease-in-out infinite}
+@keyframes petFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.detail-name{font-size:22px;font-weight:900;text-align:center;margin-top:10px}
+.detail-breed{font-size:13px;color:var(--text2);text-align:center;margin-bottom:8px}
+.mood-display{text-align:center;margin-bottom:16px}
+.mood-emoji-big{font-size:32px;margin-bottom:4px}
+.mood-text{font-size:13px;color:var(--text2)}
+.accessories-row{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-bottom:16px}
+.acc-chip{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);border-radius:20px;padding:5px 12px;font-size:14px}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.action-btn{padding:14px;border-radius:14px;text-align:center;cursor:pointer;border:1px solid var(--card-border);background:rgba(255,255,255,0.04);transition:all .15s}
+.action-btn:active{transform:scale(0.94);background:rgba(124,58,237,0.15)}
+.action-btn .ab-icon{font-size:28px;margin-bottom:4px}
+.action-btn .ab-label{font-size:12px;color:var(--text)}
+.action-btn .ab-cost{font-size:11px;color:var(--gold);margin-top:2px}
+.tricks-list{display:flex;flex-wrap:wrap;gap:8px}
+.trick-chip{background:rgba(79,70,229,0.15);border:1px solid rgba(79,70,229,0.3);border-radius:10px;padding:6px 12px;font-size:12px;cursor:pointer;transition:all .15s}
+.trick-chip:active{background:rgba(79,70,229,0.35)}
+
+/* SHOP */
+.shop-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.shop-card{padding:14px;cursor:pointer;transition:all .2s;text-align:center}
+.shop-card:active{transform:scale(0.96)}
+.shop-emoji{font-size:40px;margin-bottom:8px}
+.shop-name{font-size:13px;font-weight:600;margin-bottom:4px}
+.shop-effect{font-size:11px;color:var(--text2);margin-bottom:10px}
+.shop-price{display:flex;align-items:center;justify-content:center;gap:4px;margin-bottom:8px;font-size:14px;font-weight:800}
+.shop-price .coin-icon{font-size:14px}
+.price-gold{color:var(--gold)}
+.price-gem{color:var(--gem)}
+
+/* MISSION */
+.mission-row{padding:14px;margin-bottom:10px;border-radius:var(--radius)}
+.mission-top{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.mission-emoji{font-size:28px;width:40px;text-align:center;flex-shrink:0}
+.mission-info{flex:1}
+.mission-title{font-size:13px;font-weight:600;margin-bottom:2px}
+.mission-progress-text{font-size:11px;color:var(--text2)}
+.mission-bottom{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mission-prog-wrap{flex:1}
+.mission-reward{display:flex;align-items:center;gap:4px;font-size:13px;font-weight:700;color:var(--gold);flex-shrink:0}
+.mission-done{color:var(--green);font-size:13px;font-weight:700}
+
+/* ENERGY BAR */
+.energy-section{margin-bottom:16px}
+.energy-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:6px}
+.energy-bar{height:12px;background:rgba(255,255,255,0.06);border-radius:20px;overflow:hidden}
+.energy-fill{height:100%;background:linear-gradient(90deg,#2563eb,#60a5fa);border-radius:20px;width:70%}
+
+/* GLOWING PULSE */
+.pulse-glow{animation:pulseGlow 2s ease-in-out infinite}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 15px rgba(124,58,237,0.2)}50%{box-shadow:0 0 35px rgba(124,58,237,0.5)}}
+
+/* PROFILE CARD */
+.profile-card{text-align:center;padding:24px;margin-bottom:16px;position:relative;overflow:hidden}
+.profile-card::before{content:'';position:absolute;top:-40px;left:50%;transform:translateX(-50%);width:120px;height:120px;background:radial-gradient(circle,rgba(124,58,237,0.4),transparent 70%)}
+.profile-avatar{font-size:60px;margin-bottom:8px}
+.profile-name{font-size:20px;font-weight:800}
+.profile-id{font-size:12px;color:var(--text2);margin-top:4px}
+.profile-stats{display:flex;justify-content:center;gap:24px;margin-top:14px}
+.ps-item{text-align:center}
+.ps-val{font-size:18px;font-weight:800;color:var(--primary)}
+.ps-label{font-size:11px;color:var(--text2);margin-top:2px}
+
+/* XP BAR */
+.xp-section{margin-bottom:6px}
+.xp-label{display:flex;justify-content:space-between;font-size:11px;color:var(--text2);margin-bottom:4px}
+.level-ring{width:36px;height:36px;border-radius:50%;background:var(--primary-grad);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;flex-shrink:0}
+
+/* BACK BUTTON */
+.back-btn{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;color:var(--text2);cursor:pointer;padding:8px 0;margin-bottom:12px}
+.back-btn:active{color:var(--text)}
+
+/* FLOATING PARTICLES */
+.particles{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.particle{position:absolute;width:2px;height:2px;background:var(--primary);border-radius:50%;animation:particleFloat linear infinite;opacity:0}
+@keyframes particleFloat{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.2}100%{transform:translateY(-10vh) scale(1);opacity:0}}
+
+/* SHIMMER */
+@keyframes shimmer{0%{background-position:200% center}100%{background-position:-200% center}}
+.shimmer{background:linear-gradient(90deg,transparent 25%,rgba(255,255,255,0.06) 50%,transparent 75%);background-size:200% auto;animation:shimmer 2s linear infinite}
+
+/* SELECT */
+select{background:rgba(255,255,255,0.05);border:1px solid var(--card-border);border-radius:8px;color:var(--text);padding:6px 10px;font-family:inherit;font-size:13px;outline:none;cursor:pointer}
+select option{background:#1a1a30}
+
+/* DIVIDER */
+.divider{height:1px;background:var(--card-border);margin:12px 0}
+
+/* BADGE COUNT */
+.badge-count{background:var(--accent);color:#fff;font-size:10px;font-weight:800;min-width:18px;height:18px;border-radius:9px;display:inline-flex;align-items:center;justify-content:center;padding:0 4px}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:40px 20px;color:var(--text2)}
+.empty-state .es-icon{font-size:48px;margin-bottom:12px;opacity:0.5}
+.empty-state .es-text{font-size:14px}
+
+/* VISITOR LOG */
+.visit-log-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--card-border)}
+.visit-log-item:last-child{border-bottom:none}
+
+/* LANG SELECT */
+.lang-option{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;cursor:pointer;transition:background .15s}
+.lang-option.selected{background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3)}
+.lang-option:not(.selected){background:rgba(255,255,255,0.02);border:1px solid transparent}
+.lang-flag{font-size:20px}
+.lang-name{font-size:14px;font-weight:600}
+
+/* NOTIFICATION BADGE */
+.notif-count{position:absolute;top:-2px;left:-2px;background:var(--accent);color:#fff;font-size:9px;font-weight:800;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+</style>
+</head>
+<body>
+
+<!-- PARTICLES BACKGROUND -->
+<div class="particles" id="particles"></div>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="top-logo">🦁 ZooBoom</div>
+  <div class="top-stats">
+    <div class="stat-chip coins">
+      <span class="icon">🪙</span>
+      <span class="val" id="coin-count">4,250</span>
+    </div>
+    <div class="stat-chip gems">
+      <span class="icon">💎</span>
+      <span class="val" id="gem-count">38</span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN APP -->
+<div id="app">
+
+  <!-- PAGE: FARM -->
+  <div class="page active" id="page-farm">
+    <div class="page-content">
+      <!-- Farm Banner -->
+      <div class="farm-banner">
+        <div class="farm-sky"></div>
+        <div class="farm-stars" id="farm-stars"></div>
+        <div class="farm-ground"></div>
+        <div class="farm-trees">🌳🌿🌲🌿🌳</div>
+        <div class="farm-moon">🌙</div>
+        <div class="farm-animals-row">🦁🐕🐼🦊🐯</div>
+        <div class="farm-title-overlay">
+          <h2>باغ وحش من</h2>
+          <p>۶ حیوان شاد و سالم</p>
+        </div>
+      </div>
+
+      <!-- Quick Stats -->
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+        <div class="card" style="padding:12px;text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">🦁</div>
+          <div style="font-size:18px;font-weight:800;color:var(--primary)">۶</div>
+          <div style="font-size:10px;color:var(--text2)">حیوانات</div>
+        </div>
+        <div class="card" style="padding:12px;text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">⭐</div>
+          <div style="font-size:18px;font-weight:800;color:var(--gold)">لول ۱۲</div>
+          <div style="font-size:10px;color:var(--text2)">سطح باغ</div>
+        </div>
+        <div class="card" style="padding:12px;text-align:center">
+          <div style="font-size:22px;margin-bottom:4px">🏆</div>
+          <div style="font-size:18px;font-weight:800;color:var(--gem)">#۱۲</div>
+          <div style="font-size:10px;color:var(--text2)">رتبه</div>
+        </div>
+      </div>
+
+      <!-- Animals Grid (Quick) -->
+      <div class="section-title">حیوانات من</div>
+      <div class="animal-grid" id="farm-animal-grid"></div>
+
+      <!-- Daily Bonus -->
+      <div style="margin-top:16px">
+        <div class="section-title">جایزه روزانه</div>
+        <div class="card pulse-glow" style="padding:16px;display:flex;align-items:center;gap:14px">
+          <div style="font-size:40px">🎁</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;margin-bottom:4px">جایزه امروز</div>
+            <div style="font-size:12px;color:var(--text2)">۲۰۰ سکه + ۲ جم</div>
+          </div>
+          <button class="btn btn-gold btn-sm" onclick="claimBonus()">دریافت</button>
+        </div>
+      </div>
+
+      <!-- Active War Banner (if any) -->
+      <div style="margin-top:16px">
+        <div class="card" style="padding:14px;background:linear-gradient(135deg,rgba(233,69,96,0.15),rgba(124,58,237,0.15));border-color:rgba(233,69,96,0.3);display:flex;align-items:center;gap:12px;cursor:pointer" onclick="showPage('clan');showSubPage('war')">
+          <div style="font-size:32px">⚔️</div>
+          <div style="flex:1">
+            <div style="font-size:14px;font-weight:700;margin-bottom:2px">نبرد کلن در جریان!</div>
+            <div style="font-size:12px;color:var(--text2)">Wolves vs Lions Empire • ۱۲:۴۵:۳۰</div>
+          </div>
+          <div style="font-size:20px;color:var(--text2)">›</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: ANIMALS -->
+  <div class="page" id="page-animals">
+    <div class="page-content">
+      <div class="section-title">حیوانات من</div>
+      <!-- Search -->
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input type="text" placeholder="جستجو..." oninput="filterAnimals(this.value)" id="animal-search">
+      </div>
+      <!-- Filter Tabs -->
+      <div class="tab-bar">
+        <div class="tab-btn active" onclick="filterAnimalTab(this,'all')">همه</div>
+        <div class="tab-btn" onclick="filterAnimalTab(this,'adult')">بالغ</div>
+        <div class="tab-btn" onclick="filterAnimalTab(this,'happy')">شاد</div>
+        <div class="tab-btn" onclick="filterAnimalTab(this,'hungry')">گرسنه</div>
+        <div class="tab-btn" onclick="filterAnimalTab(this,'sick')">بیمار</div>
+        <div class="tab-btn" onclick="filterAnimalTab(this,'rare')">نادر+</div>
+      </div>
+      <!-- Animal List -->
+      <div id="animals-list"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: DETAIL -->
+  <div class="page" id="page-detail">
+    <div class="page-content" id="detail-content">
+      <!-- Rendered dynamically -->
+    </div>
+  </div>
+
+  <!-- PAGE: SHOP -->
+  <div class="page" id="page-shop">
+    <div class="page-content">
+      <div class="section-title">فروشگاه</div>
+      <div class="tab-bar" id="shop-tabs">
+        <div class="tab-btn active" onclick="switchShopTab(this,'food')">🍖 غذا</div>
+        <div class="tab-btn" onclick="switchShopTab(this,'medicine')">💊 دارو</div>
+        <div class="tab-btn" onclick="switchShopTab(this,'toy')">🎮 اسباب‌بازی</div>
+        <div class="tab-btn" onclick="switchShopTab(this,'accessory')">👑 اکسسوری</div>
+      </div>
+      <div class="shop-grid" id="shop-grid"></div>
+
+      <!-- Featured -->
+      <div style="margin-top:16px">
+        <div class="section-title">پیشنهاد ویژه</div>
+        <div class="card shimmer" style="padding:16px;display:flex;align-items:center;gap:14px">
+          <div style="font-size:44px">🎰</div>
+          <div style="flex:1">
+            <div style="font-size:15px;font-weight:700;margin-bottom:2px">باکس مرموز</div>
+            <div style="font-size:12px;color:var(--text2)">شانس دریافت حیوان Legendary!</div>
+            <div style="display:flex;align-items:center;gap:4px;margin-top:6px;font-size:14px;font-weight:800;color:var(--gem)"><span>💎</span>10</div>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="buyMysteryBox()">خرید</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: MISSIONS -->
+  <div class="page" id="page-missions">
+    <div class="page-content">
+      <div class="section-title">مأموریت‌ها</div>
+      <div class="tab-bar">
+        <div class="tab-btn active" onclick="switchMissionTab(this,'daily')">روزانه</div>
+        <div class="tab-btn" onclick="switchMissionTab(this,'weekly')">هفتگی</div>
+        <div class="tab-btn" onclick="switchMissionTab(this,'monthly')">ماهانه</div>
+      </div>
+      <!-- Daily reward tracker -->
+      <div class="card" style="padding:14px;margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <span style="font-size:13px;font-weight:600">پیشرفت روزانه</span>
+          <span style="font-size:12px;color:var(--text2)">۳/۴ کامل شده</span>
+        </div>
+        <div class="prog-wrap"><div class="prog-bar prog-xp" style="width:75%"></div></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px">۳۲۵ / ۴۴۵ سکه دریافت شده</div>
+      </div>
+      <div id="missions-list"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: VISITORS -->
+  <div class="page" id="page-visitors">
+    <div class="page-content">
+      <div class="section-title">دوستان آنلاین</div>
+      <div id="visitors-list"></div>
+      <div class="divider"></div>
+      <div class="section-title" style="margin-top:12px">بازدیدکنندگان اخیر</div>
+      <div id="visit-log"></div>
+    </div>
+  </div>
+
+  <!-- PAGE: CLAN -->
+  <div class="page" id="page-clan">
+    <div class="page-content" id="clan-content">
+      <!-- Rendered dynamically -->
+    </div>
+  </div>
+
+  <!-- PAGE: WAR -->
+  <div class="page" id="page-war">
+    <div class="page-content">
+      <div class="back-btn" onclick="showPage('clan')">‹ بازگشت به کلن</div>
+      <div class="section-title">نبرد کلن</div>
+      <!-- VS Card -->
+      <div class="card" style="padding:20px;margin-bottom:14px">
+        <div class="war-vs">
+          <div class="war-clan-side">
+            <div class="war-clan-emoji">🐺</div>
+            <div class="war-clan-name">Wolves Clan</div>
+            <div class="war-score" style="color:var(--green)">۱۲,۴۵۰</div>
+          </div>
+          <div class="war-vs-text">VS</div>
+          <div class="war-clan-side">
+            <div class="war-clan-emoji">🦁</div>
+            <div class="war-clan-name">Lions Empire</div>
+            <div class="war-score" style="color:var(--accent)">۹,۲۳۰</div>
+          </div>
+        </div>
+        <div class="war-bars">
+          <div class="war-bar-row">
+            <span class="war-bar-label">ما</span>
+            <div class="prog-wrap" style="flex:1;height:12px"><div class="prog-bar prog-war-us" style="width:57%"></div></div>
+            <span style="font-size:11px;color:var(--text2);width:30px">57%</span>
+          </div>
+          <div class="war-bar-row">
+            <span class="war-bar-label">حریف</span>
+            <div class="prog-wrap" style="flex:1;height:12px"><div class="prog-bar prog-war-enemy" style="width:43%"></div></div>
+            <span style="font-size:11px;color:var(--text2);width:30px">43%</span>
+          </div>
+        </div>
+        <div class="war-timer">
+          <div class="timer-val" id="war-timer">۱۲:۴۵:۳۰</div>
+          <div class="timer-label">زمان باقی‌مانده</div>
+        </div>
+        <button class="btn btn-accent btn-full" onclick="joinBattle()">⚔️ شرکت در نبرد</button>
+      </div>
+
+      <!-- Participants -->
+      <div class="section-title">شرکت‌کنندگان</div>
+      <div class="card" style="padding:14px">
+        <div class="member-row">
+          <div class="member-avatar">🐯</div>
+          <div class="member-info">
+            <div class="member-name">Soroush</div>
+            <div class="member-role" style="color:var(--green)">۲,۴۵۰ امتیاز</div>
+          </div>
+          <span class="role-badge role-leader">رهبر</span>
+        </div>
+        <div class="member-row">
+          <div class="member-avatar">🦁</div>
+          <div class="member-info">
+            <div class="member-name">Ali</div>
+            <div class="member-role" style="color:var(--green)">۱,۸۰۰ امتیاز</div>
+          </div>
+          <span class="role-badge role-vice">معاون</span>
+        </div>
+        <div class="member-row">
+          <div class="member-avatar">🐺</div>
+          <div class="member-info">
+            <div class="member-name">Reza</div>
+            <div class="member-role" style="color:var(--text2)">۹۸۰ امتیاز</div>
+          </div>
+          <span class="role-badge role-member">عضو</span>
+        </div>
+        <div class="member-row">
+          <div class="member-avatar">🦊</div>
+          <div class="member-info">
+            <div class="member-name">Sara</div>
+            <div class="member-role" style="color:var(--text2)">۶۵۰ امتیاز</div>
+          </div>
+          <span class="role-badge role-member">عضو</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: ADVENTURE -->
+  <div class="page" id="page-adventure">
+    <div class="page-content">
+      <div class="section-title">ماجراجویی</div>
+
+      <!-- Map -->
+      <div class="adv-map">
+        <div class="adv-trees">🌲🌳🌿🌲🌳🌿🌲🌲🌳🌿🌲🌳🌿🌲🌲🌳🌿🌲🌳</div>
+        <div class="adv-path"></div>
+        <div class="adv-hero">🦁</div>
+        <div class="adv-boss">
+          <div class="boss-emoji">🐉</div>
+          <div class="boss-label">BOSS</div>
+        </div>
+      </div>
+
+      <!-- Energy -->
+      <div class="card" style="padding:14px;margin-bottom:14px">
+        <div class="energy-label">
+          <span>⚡ انرژی</span>
+          <span>7 / 10</span>
+        </div>
+        <div class="energy-bar"><div class="energy-fill" style="width:70%"></div></div>
+        <div style="font-size:11px;color:var(--text2);margin-top:6px">شارژ مجدد در ۰۴:۳۰</div>
+      </div>
+
+      <!-- Current Stage -->
+      <div class="section-title">مرحله فعلی</div>
+      <div class="card" style="padding:16px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+          <div style="font-size:36px">🌲</div>
+          <div>
+            <div style="font-size:16px;font-weight:800">جنگل تاریک</div>
+            <div style="font-size:12px;color:var(--text2)">مرحله ۷ از ۱۰</div>
+          </div>
+          <div style="margin-right:auto">
+            <span class="rarity rarity-rare">سخت</span>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;text-align:center;margin-bottom:12px">
+          <div style="background:rgba(255,255,255,0.04);padding:8px;border-radius:10px">
+            <div style="font-size:16px;margin-bottom:2px">⚔️</div>
+            <div style="font-size:11px;color:var(--text2)">دشمن</div>
+            <div style="font-size:13px;font-weight:700">۳</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);padding:8px;border-radius:10px">
+            <div style="font-size:16px;margin-bottom:2px">⚡</div>
+            <div style="font-size:11px;color:var(--text2)">هزینه</div>
+            <div style="font-size:13px;font-weight:700">۲ انرژی</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);padding:8px;border-radius:10px">
+            <div style="font-size:16px;margin-bottom:2px">🪙</div>
+            <div style="font-size:11px;color:var(--text2)">جایزه</div>
+            <div style="font-size:13px;font-weight:700;color:var(--gold)">۲۵۰</div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="startAdventure()">🗡️ شروع ماجراجویی</button>
+      </div>
+
+      <!-- Boss Encounter -->
+      <div class="section-title">باس مرحله</div>
+      <div class="card" style="padding:16px;background:linear-gradient(135deg,rgba(233,69,96,0.1),rgba(124,58,237,0.1));border-color:rgba(233,69,96,0.3)">
+        <div style="display:flex;align-items:center;gap:14px;margin-bottom:12px">
+          <div style="font-size:56px;line-height:1">🐉</div>
+          <div>
+            <div style="font-size:16px;font-weight:800;color:var(--accent)">اژدهای تاریکی</div>
+            <div style="font-size:12px;color:var(--text2)">Boss Level 15</div>
+            <span class="rarity rarity-legendary" style="margin-top:4px;display:inline-block">Legendary Boss</span>
+          </div>
+        </div>
+        <div style="margin-bottom:8px">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:4px;display:flex;justify-content:space-between"><span>❤️ سلامتی</span><span>۸۵%</span></div>
+          <div class="prog-wrap"><div class="prog-bar prog-health" style="width:85%"></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px">
+          <div style="background:rgba(255,255,255,0.04);padding:8px;border-radius:10px;text-align:center">
+            <div style="font-size:11px;color:var(--text2)">جایزه Boss</div>
+            <div style="font-size:15px;font-weight:800;color:var(--gold)">🪙 1000</div>
+          </div>
+          <div style="background:rgba(255,255,255,0.04);padding:8px;border-radius:10px;text-align:center">
+            <div style="font-size:11px;color:var(--text2)">حیوان نادر</div>
+            <div style="font-size:15px;font-weight:800;color:var(--gem)">💎 حیوان</div>
+          </div>
+        </div>
+        <button class="btn btn-accent btn-full" onclick="fightBoss()">🔥 نبرد با باس</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE: SETTINGS -->
+  <div class="page" id="page-settings">
+    <div class="page-content">
+      <!-- Profile -->
+      <div class="card profile-card">
+        <div class="profile-avatar">🧑‍💻</div>
+        <div class="profile-name" id="settings-name">بازیکن</div>
+        <div class="profile-id">ID: #ZB-<span id="settings-id">00000</span></div>
+        <div class="profile-stats">
+          <div class="ps-item">
+            <div class="ps-val">۶</div>
+            <div class="ps-label">حیوانات</div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-val">۱۲</div>
+            <div class="ps-label">لول</div>
+          </div>
+          <div class="ps-item">
+            <div class="ps-val">#۱۲</div>
+            <div class="ps-label">رتبه</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="card" style="padding:0 16px;margin-bottom:14px">
+        <div class="section-title" style="padding-top:14px">تنظیمات بازی</div>
+        <div class="setting-row">
+          <div class="setting-label"><span class="setting-icon">🔊</span>صدای بازی</div>
+          <div class="toggle on" onclick="toggleSetting(this,'sound')" id="toggle-sound"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span class="setting-icon">🎵</span>موسیقی</div>
+          <div class="toggle on" onclick="toggleSetting(this,'music')" id="toggle-music"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span class="setting-icon">🔔</span>اعلان‌ها</div>
+          <div class="toggle on" onclick="toggleSetting(this,'notif')" id="toggle-notif"></div>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span class="setting-icon">📳</span>ویبره</div>
+          <div class="toggle" onclick="toggleSetting(this,'vibrate')" id="toggle-vibrate"></div>
+        </div>
+      </div>
+
+      <!-- Language -->
+      <div class="card" style="padding:16px;margin-bottom:14px">
+        <div class="section-title" style="margin-bottom:12px">زبان بازی</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div class="lang-option selected" onclick="selectLang(this,'fa')">
+            <span class="lang-flag">🇮🇷</span><span class="lang-name">فارسی</span>
+            <span style="margin-right:auto;color:var(--primary);font-size:14px">✓</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this,'en')">
+            <span class="lang-flag">🇺🇸</span><span class="lang-name">English</span>
+          </div>
+          <div class="lang-option" onclick="selectLang(this,'ar')">
+            <span class="lang-flag">🇸🇦</span><span class="lang-name">العربية</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- About -->
+      <div class="card" style="padding:0 16px;margin-bottom:14px">
+        <div class="section-title" style="padding-top:14px">اطلاعات</div>
+        <div class="setting-row">
+          <div class="setting-label"><span class="setting-icon">📱</span>نسخه بازی</div>
+          <span style="font-size:13px;color:var(--text2)">v1.0.0</span>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span class="setting-icon">💬</span>پشتیبانی</div>
+          <span style="font-size:13px;color:var(--primary);cursor:pointer" onclick="openSupport()">تماس</span>
+        </div>
+        <div class="setting-row">
+          <div class="setting-label"><span class="setting-icon">📜</span>قوانین بازی</div>
+          <span style="font-size:20px;color:var(--text2)">›</span>
+        </div>
+      </div>
+
+      <div style="text-align:center;color:var(--text2);font-size:11px;margin-top:8px">
+        ZooBoom © ۲۰۲۴ | Telegram Mini App
+      </div>
+    </div>
+  </div>
+
+</div><!-- end #app -->
+
+<!-- BOTTOM NAV -->
+<div id="bottomnav">
+  <div class="nav-item active" onclick="showPage('farm')" data-page="farm">
+    <span class="nav-icon">🌿</span>
+    <span class="nav-label">مزرعه</span>
+  </div>
+  <div class="nav-item" onclick="showPage('animals')" data-page="animals">
+    <span class="nav-icon">🦁</span>
+    <span class="nav-label">حیوانات</span>
+  </div>
+  <div class="nav-item" onclick="showPage('shop')" data-page="shop">
+    <span class="nav-icon">🛒</span>
+    <span class="nav-label">فروشگاه</span>
+  </div>
+  <div class="nav-item" onclick="showPage('missions')" data-page="missions" style="position:relative">
+    <span class="nav-icon">📋</span>
+    <span class="nav-label">مأموریت‌ها</span>
+    <span class="notif-count">۳</span>
+  </div>
+  <div class="nav-item" onclick="showPage('visitors')" data-page="visitors">
+    <span class="nav-icon">👥</span>
+    <span class="nav-label">دوستان</span>
+  </div>
+  <div class="nav-item" onclick="showPage('clan')" data-page="clan">
+    <span class="nav-icon">⚔️</span>
+    <span class="nav-label">کلن</span>
+  </div>
+  <div class="nav-item" onclick="showPage('settings')" data-page="settings">
+    <span class="nav-icon">⚙️</span>
+    <span class="nav-label">تنظیمات</span>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- DETAIL MODAL (for action confirmations) -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal()"></div>
+<div class="modal" id="modal">
+  <div class="modal-handle"></div>
+  <div id="modal-body"></div>
+</div>
+
+<script>
+// ==============================
+// DATA
+// ==============================
+const API_BASE = 'https://yourdomain.com/api/zoo';
+
+const MOCK_ANIMALS = [
+  {id:1,emoji:'🦁',name:'شیر',nickname:'رکس',breed:'آفریقایی',color:'طلایی',gender:'نر',level:10,rarity:'epic',xp:2800,xp_next:3000,health:85,happiness:92,hunger:60,energy:75,cleanliness:80,mood:'شاد',tricks:['بشین','دستتو بده','بپر'],accessories:['👑','🎀']},
+  {id:2,emoji:'🐕',name:'سگ',nickname:'بامبی',breed:'هاسکی',color:'سفید و خاکستری',gender:'ماده',level:6,rarity:'rare',xp:1200,xp_next:1500,health:95,happiness:88,hunger:45,energy:90,cleanliness:70,mood:'خوشحال',tricks:['بشین','بیا اینجا'],accessories:['🎀']},
+  {id:3,emoji:'🦊',name:'روباه',nickname:'فاکس',breed:'قرمز',color:'نارنجی',gender:'نر',level:4,rarity:'uncommon',xp:600,xp_next:800,health:72,happiness:65,hunger:20,energy:50,cleanliness:60,mood:'گرسنه',tricks:['بشین'],accessories:[]},
+  {id:4,emoji:'🐼',name:'پاندا',nickname:'پاندی',breed:'چینی',color:'سیاه و سفید',gender:'ماده',level:8,rarity:'legendary',xp:2100,xp_next:2500,health:90,happiness:95,hunger:80,energy:85,cleanliness:92,mood:'شاد',tricks:['بشین','برقص','بخند'],accessories:['🌟','💫']},
+  {id:5,emoji:'🐯',name:'ببر',nickname:'تایگر',breed:'بنگال',color:'نارنجی و مشکی',gender:'نر',level:12,rarity:'mythic',xp:3800,xp_next:4000,health:98,happiness:80,hunger:70,energy:95,cleanliness:85,mood:'پرانرژی',tricks:['بشین','دستتو بده','غرش کن','بپر'],accessories:['👑','🔥']},
+  {id:6,emoji:'🦋',name:'پروانه',nickname:'باترفلای',breed:'ابریشمی',color:'آبی نئون',gender:'ماده',level:3,rarity:'rare',xp:350,xp_next:500,health:80,happiness:75,hunger:90,energy:65,cleanliness:95,mood:'آرام',tricks:[],accessories:[]},
+];
+
+const SHOP_CATEGORIES = {
+  food:[{emoji:'🍖',name:'استیک ویژه',price:50,effect:'+25 گرسنگی'},{emoji:'🥩',name:'گوشت تازه',price:30,effect:'+15 گرسنگی'},{emoji:'🐟',name:'ماهی تازه',price:40,effect:'+20 گرسنگی'},{emoji:'🥕',name:'هویج تازه',price:15,effect:'+10 گرسنگی'},{emoji:'🍯',name:'عسل طبیعی',price:80,effect:'+30 گرسنگی + شادی'},{emoji:'💊',name:'مکمل غذایی',price:120,effect:'+20 همه چیز'}],
+  medicine:[{emoji:'💉',name:'واکسن',price:150,effect:'+50 سلامتی'},{emoji:'🩺',name:'درمان فوری',price:200,effect:'+80 سلامتی'},{emoji:'🌿',name:'داروی گیاهی',price:80,effect:'+30 سلامتی'},{emoji:'💊',name:'ویتامین',price:60,effect:'+20 سلامتی + انرژی'}],
+  toy:[{emoji:'🎾',name:'توپ بازی',price:100,effect:'+30 شادی'},{emoji:'🧸',name:'عروسک',price:80,effect:'+25 شادی'},{emoji:'🎪',name:'تونل',price:200,effect:'+40 شادی + ورزش'}],
+  accessory:[{emoji:'👑',name:'تاج طلایی',price:500,gems:true,effect:'نمایش ویژه'},{emoji:'🎀',name:'پاپیون',price:200,effect:'زیبایی +10'},{emoji:'🔮',name:'گردنبند جادویی',price:800,gems:true,effect:'شانس نادر +5%'}],
+};
+
+const MISSIONS = [
+  {id:1,emoji:'🍖',title:'۳ بار به حیوانت غذا بده',progress:2,total:3,reward:50,type:'daily'},
+  {id:2,emoji:'💊',title:'یه حیوان بیمار رو درمان کن',progress:0,total:1,reward:100,type:'daily'},
+  {id:3,emoji:'🎮',title:'با حیوانت بازی کن',progress:1,total:1,reward:75,done:true,type:'daily'},
+  {id:4,emoji:'🏆',title:'به باغ وحش یه دوست برو',progress:0,total:1,reward:120,type:'daily'},
+  {id:5,emoji:'🧬',title:'۵ حیوان مختلف آموزش بده',progress:2,total:5,reward:300,type:'weekly'},
+  {id:6,emoji:'💰',title:'۱۰۰۰ سکه جمع کن',progress:750,total:1000,reward:200,type:'weekly'},
+];
+
+const CLAN = {
+  name:'Wolves Clan',emoji:'🐺',level:8,xp:12500,xp_next:20000,members:28,max_members:50,rank:12,score:45300,
+  members_list:[{name:'Soroush',emoji:'🐯',level:24,role:'رهبر'},{name:'Ali',emoji:'🦁',level:18,role:'معاون'},{name:'Reza',emoji:'🐺',level:15,role:'عضو'},{name:'Sara',emoji:'🦊',level:12,role:'عضو'}],
+  war:{status:'active',enemy_clan:'Lions Empire',enemy_emoji:'🦁',our_score:12450,enemy_score:9230,time_left:'۱۲:۴۵:۳۰'},
+  chat:[{user:'علی',msg:'سلام! آماده‌ایم برای نبرد؟',time:'۱۰ دقیقه پیش'},{user:'رضا',msg:'آره آماده‌ام!',time:'۸ دقیقه پیش'}]
+};
+
+const FRIENDS = [
+  {name:'Arash',emoji:'🐯',level:18,online:true,animals:8,lastSeen:'الان'},
+  {name:'Mina',emoji:'🦋',level:12,online:true,animals:5,lastSeen:'۲ دقیقه پیش'},
+  {name:'Dariush',emoji:'🐺',level:22,online:false,animals:10,lastSeen:'۱ ساعت پیش'},
+  {name:'Neda',emoji:'🦁',level:9,online:false,animals:4,lastSeen:'دیروز'},
+  {name:'Kamran',emoji:'🐼',level:15,online:true,animals:7,lastSeen:'الان'},
+];
+
+// ==============================
+// STATE
+// ==============================
+let state = {
+  coins: 4250,
+  gems: 38,
+  currentPage: 'farm',
+  currentAnimal: null,
+  shopTab: 'food',
+  missionTab: 'daily',
+  settings: {sound:true, music:true, notif:true, vibrate:false},
+  animals: JSON.parse(JSON.stringify(MOCK_ANIMALS)),
+};
+
+// ==============================
+// TELEGRAM INIT
+// ==============================
+try {
+  const tg = window.Telegram.WebApp;
+  tg.ready();
+  tg.expand();
+  tg.setHeaderColor('#0a0a18');
+  tg.setBackgroundColor('#0a0a18');
+  const user = tg.initDataUnsafe?.user;
+  if (user) {
+    document.getElementById('settings-name').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+    document.getElementById('settings-id').textContent = user.id;
+  }
+} catch(e) {
+  // Dev fallback
+  document.getElementById('settings-name').textContent = 'بازیکن تست';
+  document.getElementById('settings-id').textContent = '12345';
+}
+
+// ==============================
+// PARTICLES
+// ==============================
+function createParticles() {
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 15; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `left:${Math.random()*100}%;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;animation-duration:${Math.random()*10+8}s;animation-delay:${Math.random()*5}s;opacity:0`;
+    container.appendChild(p);
+  }
+}
+createParticles();
+
+// Farm stars
+function createStars() {
+  const c = document.getElementById('farm-stars');
+  if (!c) return;
+  for (let i = 0; i < 20; i++) {
+    const s = document.createElement('div');
+    s.className = 'star';
+    s.style.cssText = `left:${Math.random()*100}%;top:${Math.random()*100}%;width:${Math.random()*2+1}px;height:${Math.random()*2+1}px;animation-delay:${Math.random()*2}s`;
+    c.appendChild(s);
+  }
+}
+createStars();
+
+// ==============================
+// NAVIGATION
+// ==============================
+function showPage(name) {
+  // Remove active from all pages
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+  // If subpage
+  let pageName = name;
+
+  const page = document.getElementById('page-' + pageName);
+  if (page) {
+    page.classList.add('active');
+    // Re-render if needed
+    renderPage(pageName);
+  }
+
+  // Highlight nav
+  const navItem = document.querySelector(`.nav-item[data-page="${pageName}"]`);
+  if (navItem) navItem.classList.add('active');
+
+  state.currentPage = pageName;
+
+  // Haptic feedback
+  try { window.Telegram.WebApp.HapticFeedback.selectionChanged(); } catch(e) {}
+}
+
+function showSubPage(sub) {
+  if (sub === 'war') {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-war').classList.add('active');
+    state.currentPage = 'war';
+  }
+}
+
+// ==============================
+// RENDER FUNCTIONS
+// ==============================
+function renderPage(name) {
+  switch(name) {
+    case 'farm': renderFarmGrid(); break;
+    case 'animals': renderAnimalsList(); break;
+    case 'shop': renderShop(); break;
+    case 'missions': renderMissions(); break;
+    case 'visitors': renderVisitors(); break;
+    case 'clan': renderClan(); break;
+  }
+}
+
+// RARITY
+function rarityLabel(r) {
+  const map = {common:'Common',uncommon:'Uncommon',rare:'Rare',epic:'Epic',legendary:'Legendary',mythic:'Mythic'};
+  return map[r] || r;
+}
+
+// MOOD EMOJI
+function moodEmoji(m) {
+  const map = {شاد:'😄',خوشحال:'😊',گرسنه:'😋',آرام:'😌',پرانرژی:'⚡'};
+  return map[m] || '😊';
+}
+
+// FARM GRID (3x2 preview)
+function renderFarmGrid() {
+  const grid = document.getElementById('farm-animal-grid');
+  if (!grid) return;
+  grid.innerHTML = state.animals.slice(0,6).map(a => `
+    <div class="card animal-card card-hover" onclick="openDetail(${a.id})">
+      <div class="animal-emoji-wrap">
+        <span style="font-size:52px">${a.emoji}</span>
+        <div class="level-badge">${a.level}</div>
+      </div>
+      <div class="animal-name">${a.nickname}</div>
+      <div style="text-align:center;margin-bottom:6px"><span class="rarity rarity-${a.rarity}">${rarityLabel(a.rarity)}</span></div>
+      <div class="animal-bars">
+        <div class="mini-bar-row">
+          <span class="mini-bar-icon">❤️</span>
+          <div class="mini-bar"><div class="mini-bar-fill prog-health" style="width:${a.health}%"></div></div>
+          <span style="font-size:10px;color:var(--text2);width:24px;text-align:left">${a.health}</span>
+        </div>
+        <div class="mini-bar-row">
+          <span class="mini-bar-icon">😊</span>
+          <div class="mini-bar"><div class="mini-bar-fill prog-happiness" style="width:${a.happiness}%"></div></div>
+          <span style="font-size:10px;color:var(--text2);width:24px;text-align:left">${a.happiness}</span>
+        </div>
+        <div class="mini-bar-row">
+          <span class="mini-bar-icon">🍖</span>
+          <div class="mini-bar"><div class="mini-bar-fill prog-hunger" style="width:${a.hunger}%"></div></div>
+          <span style="font-size:10px;color:var(--text2);width:24px;text-align:left">${a.hunger}</span>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ANIMALS LIST
+function renderAnimalsList(filter='all', search='') {
+  const list = document.getElementById('animals-list');
+  if (!list) return;
+  let animals = state.animals;
+  if (search) animals = animals.filter(a => a.nickname.includes(search) || a.name.includes(search));
+  if (filter === 'happy') animals = animals.filter(a => a.happiness >= 80);
+  else if (filter === 'hungry') animals = animals.filter(a => a.hunger < 40);
+  else if (filter === 'sick') animals = animals.filter(a => a.health < 75);
+  else if (filter === 'rare') animals = animals.filter(a => ['rare','epic','legendary','mythic'].includes(a.rarity));
+
+  list.innerHTML = animals.map(a => `
+    <div class="card card-hover" style="padding:14px;margin-bottom:12px;cursor:pointer" onclick="openDetail(${a.id})">
+      <div style="display:flex;align-items:center;gap:14px">
+        <div style="font-size:56px;line-height:1;flex-shrink:0;position:relative">
+          ${a.emoji}
+          <div class="level-badge">${a.level}</div>
+        </div>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:2px">
+            <span style="font-size:16px;font-weight:800">${a.nickname}</span>
+            <span class="rarity rarity-${a.rarity}">${rarityLabel(a.rarity)}</span>
+          </div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:8px">${a.name} | ${a.breed} | ${a.gender === 'نر' ? '♂' : '♀'}</div>
+          <div class="xp-section">
+            <div class="xp-label"><span>XP ${a.xp.toLocaleString('fa')}</span><span>${a.xp_next.toLocaleString('fa')}</span></div>
+            <div class="prog-wrap"><div class="prog-bar prog-xp" style="width:${Math.round(a.xp/a.xp_next*100)}%"></div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:8px">
+            <div class="mini-bar-row"><span class="mini-bar-icon">❤️</span><div class="mini-bar"><div class="mini-bar-fill prog-health" style="width:${a.health}%"></div></div><span style="font-size:10px;color:var(--text2);width:24px;text-align:left">${a.health}</span></div>
+            <div class="mini-bar-row"><span class="mini-bar-icon">😊</span><div class="mini-bar"><div class="mini-bar-fill prog-happiness" style="width:${a.happiness}%"></div></div><span style="font-size:10px;color:var(--text2);width:24px;text-align:left">${a.happiness}</span></div>
+            <div class="mini-bar-row"><span class="mini-bar-icon">🍖</span><div class="mini-bar"><div class="mini-bar-fill prog-hunger" style="width:${a.hunger}%"></div></div><span style="font-size:10px;color:var(--text2);width:24px;text-align:left">${a.hunger}</span></div>
+            <div class="mini-bar-row"><span class="mini-bar-icon">⚡</span><div class="mini-bar"><div class="mini-bar-fill prog-energy" style="width:${a.energy}%"></div></div><span style="font-size:10px;color:var(--text2);width:24px;text-align:left">${a.energy}</span></div>
+          </div>
+        </div>
+        <div style="font-size:20px;color:var(--text2);flex-shrink:0">›</div>
+      </div>
+      ${a.accessories.length ? `<div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap">${a.accessories.map(ac=>`<span class="acc-chip" style="font-size:12px;padding:3px 8px">${ac}</span>`).join('')}</div>` : ''}
+    </div>
+  `).join('') || '<div class="empty-state"><div class="es-icon">🔍</div><div class="es-text">حیوانی پیدا نشد</div></div>';
+}
+
+// ANIMAL DETAIL
+function openDetail(id) {
+  const a = state.animals.find(x => x.id === id);
+  if (!a) return;
+  state.currentAnimal = a;
+
+  const content = document.getElementById('detail-content');
+  content.innerHTML = `
+    <div class="back-btn" onclick="goBackFromDetail()">‹ بازگشت</div>
+
+    <!-- Hero -->
+    <div class="detail-hero">
+      <span class="detail-emoji">${a.emoji}</span>
+      <div class="detail-name">${a.nickname}</div>
+      <div class="detail-breed">${a.name} | ${a.breed} | ${a.gender === 'نر' ? '♂ نر' : '♀ ماده'}</div>
+      <span class="rarity rarity-${a.rarity}">${rarityLabel(a.rarity)}</span>
+    </div>
+
+    <!-- XP -->
+    <div class="card" style="padding:14px;margin-bottom:12px">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div class="level-ring">${a.level}</div>
+        <div style="flex:1">
+          <div class="xp-label"><span style="font-size:12px;font-weight:600">تجربه</span><span style="font-size:12px;color:var(--text2)">${a.xp.toLocaleString('fa')} / ${a.xp_next.toLocaleString('fa')}</span></div>
+          <div class="prog-wrap" style="margin-top:4px"><div class="prog-bar prog-xp" style="width:${Math.round(a.xp/a.xp_next*100)}%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mood -->
+    <div class="card" style="padding:14px;margin-bottom:12px;text-align:center">
+      <div style="font-size:11px;color:var(--text2);margin-bottom:6px">حال و هوا</div>
+      <div style="font-size:32px;margin-bottom:4px">${moodEmoji(a.mood)}</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:8px">${a.mood}</div>
+      <div class="prog-wrap"><div class="prog-bar prog-mood" style="width:${a.happiness}%"></div></div>
+      <div style="font-size:11px;color:var(--text2);margin-top:4px">${a.happiness}%</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="card" style="padding:14px;margin-bottom:12px">
+      <div class="section-title">آمار</div>
+      <div class="stat-row">
+        <span class="label">❤️ سلامتی</span>
+        <div class="prog-wrap"><div class="prog-bar prog-health" style="width:${a.health}%"></div></div>
+        <span class="val" style="color:var(--green)">${a.health}</span>
+      </div>
+      <div class="stat-row">
+        <span class="label">😊 شادی</span>
+        <div class="prog-wrap"><div class="prog-bar prog-happiness" style="width:${a.happiness}%"></div></div>
+        <span class="val" style="color:var(--orange)">${a.happiness}</span>
+      </div>
+      <div class="stat-row">
+        <span class="label">🍖 گرسنگی</span>
+        <div class="prog-wrap"><div class="prog-bar prog-hunger" style="width:${a.hunger}%"></div></div>
+        <span class="val" style="color:var(--accent)">${a.hunger}</span>
+      </div>
+      <div class="stat-row">
+        <span class="label">⚡ انرژی</span>
+        <div class="prog-wrap"><div class="prog-bar prog-energy" style="width:${a.energy}%"></div></div>
+        <span class="val" style="color:var(--blue)">${a.energy}</span>
+      </div>
+      <div class="stat-row">
+        <span class="label">🛁 تمیزی</span>
+        <div class="prog-wrap"><div class="prog-bar prog-clean" style="width:${a.cleanliness}%"></div></div>
+        <span class="val" style="color:var(--gem)">${a.cleanliness}</span>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="section-title">اقدامات</div>
+    <div class="action-grid" style="margin-bottom:14px">
+      <div class="action-btn card" onclick="doAction('feed',${a.id})">
+        <div class="ab-icon">🍖</div>
+        <div class="ab-label">غذا دادن</div>
+        <div class="ab-cost">🪙 ۳۰</div>
+      </div>
+      <div class="action-btn card" onclick="doAction('medicine',${a.id})">
+        <div class="ab-icon">💊</div>
+        <div class="ab-label">دارو دادن</div>
+        <div class="ab-cost">🪙 ۸۰</div>
+      </div>
+      <div class="action-btn card" onclick="doAction('play',${a.id})">
+        <div class="ab-icon">🎮</div>
+        <div class="ab-label">بازی کردن</div>
+        <div class="ab-cost">رایگان</div>
+      </div>
+      <div class="action-btn card" onclick="doAction('clean',${a.id})">
+        <div class="ab-icon">🛁</div>
+        <div class="ab-label">تمیز کردن</div>
+        <div class="ab-cost">🪙 ۲۰</div>
+      </div>
+      <div class="action-btn card" onclick="doAction('pet',${a.id})">
+        <div class="ab-icon">🤗</div>
+        <div class="ab-label">نوازش</div>
+        <div class="ab-cost">رایگان</div>
+      </div>
+      <div class="action-btn card" onclick="doAction('sleep',${a.id})">
+        <div class="ab-icon">😴</div>
+        <div class="ab-label">خواباندن</div>
+        <div class="ab-cost">رایگان</div>
+      </div>
+    </div>
+
+    <!-- Accessories -->
+    ${a.accessories.length ? `
+    <div class="section-title">اکسسوری‌ها</div>
+    <div class="accessories-row" style="justify-content:flex-start;margin-bottom:14px">
+      ${a.accessories.map(ac => `<span class="acc-chip">${ac}</span>`).join('')}
+      <span class="acc-chip" style="cursor:pointer;border-style:dashed" onclick="openShopForAccessory()">+ افزودن</span>
+    </div>
+    ` : `
+    <div class="section-title">اکسسوری‌ها</div>
+    <div style="margin-bottom:14px"><button class="btn btn-glass btn-sm" onclick="openShopForAccessory()">+ افزودن اکسسوری</button></div>
+    `}
+
+    <!-- Tricks -->
+    ${a.tricks.length ? `
+    <div class="section-title">ترفندها</div>
+    <div class="tricks-list" style="margin-bottom:14px">
+      ${a.tricks.map(t => `<div class="trick-chip" onclick="performTrick('${t}',${a.id})">${t}</div>`).join('')}
+    </div>
+    ` : `
+    <div class="section-title">ترفندها</div>
+    <div class="empty-state" style="padding:20px"><div class="es-icon" style="font-size:32px">🎓</div><div class="es-text">هنوز ترفندی یاد نگرفته</div></div>
+    `}
+
+    <!-- Info -->
+    <div class="card" style="padding:14px">
+      <div class="section-title">اطلاعات</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:10px">
+          <div style="font-size:10px;color:var(--text2)">نژاد</div>
+          <div style="font-size:13px;font-weight:600;margin-top:2px">${a.breed}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:10px">
+          <div style="font-size:10px;color:var(--text2)">رنگ</div>
+          <div style="font-size:13px;font-weight:600;margin-top:2px">${a.color}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:10px">
+          <div style="font-size:10px;color:var(--text2)">جنسیت</div>
+          <div style="font-size:13px;font-weight:600;margin-top:2px">${a.gender}</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.03);padding:10px;border-radius:10px">
+          <div style="font-size:10px;color:var(--text2)">سطح</div>
+          <div style="font-size:13px;font-weight:600;margin-top:2px">لول ${a.level}</div>
+        </div>
+      </div>
+    </div>
+  `;
+
+  // Show detail page
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-detail').classList.add('active');
+  document.getElementById('page-detail').scrollTop = 0;
+  state.currentPage = 'detail';
+}
+
+function goBackFromDetail() {
+  // Go back to wherever we came from
+  const prev = state.previousPage || 'animals';
+  showPage(prev);
+}
+
+// SHOP
+function renderShop(tab='food') {
+  const grid = document.getElementById('shop-grid');
+  if (!grid) return;
+  const items = SHOP_CATEGORIES[state.shopTab] || SHOP_CATEGORIES.food;
+  grid.innerHTML = items.map((item,i) => `
+    <div class="card shop-card card-hover" onclick="buyItem(${i},'${state.shopTab}')">
+      <div class="shop-emoji">${item.emoji}</div>
+      <div class="shop-name">${item.name}</div>
+      <div class="shop-effect">${item.effect}</div>
+      <div class="shop-price ${item.gems ? 'price-gem' : 'price-gold'}">
+        <span>${item.gems ? '💎' : '🪙'}</span>
+        <span>${item.price}</span>
+      </div>
+      <button class="btn ${item.gems ? 'btn-primary' : 'btn-gold'} btn-sm btn-full" onclick="event.stopPropagation();buyItem(${i},'${state.shopTab}')">خرید</button>
+    </div>
+  `).join('');
+}
+
+function switchShopTab(el, tab) {
+  document.querySelectorAll('#shop-tabs .tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  state.shopTab = tab;
+  renderShop();
+}
+
+// MISSIONS
+function renderMissions(tab='daily') {
+  const list = document.getElementById('missions-list');
+  if (!list) return;
+  const missions = MISSIONS.filter(m => m.type === state.missionTab);
+  list.innerHTML = missions.map(m => {
+    const pct = Math.round(m.progress / m.total * 100);
+    const done = m.done || m.progress >= m.total;
+    return `
+      <div class="card mission-row ${done ? 'pulse-glow' : ''}" style="${done ? 'border-color:rgba(34,197,94,0.3)' : ''}">
+        <div class="mission-top">
+          <div class="mission-emoji">${m.emoji}</div>
+          <div class="mission-info">
+            <div class="mission-title">${m.title}</div>
+            <div class="mission-progress-text">${m.progress} از ${m.total} ${done ? '✓ تکمیل شد' : ''}</div>
+          </div>
+        </div>
+        <div class="mission-bottom">
+          <div class="mission-prog-wrap">
+            <div class="prog-wrap"><div class="prog-bar ${done ? 'prog-health' : 'prog-xp'}" style="width:${pct}%"></div></div>
+          </div>
+          <div class="mission-reward">🪙 ${m.reward}</div>
+          ${done ? `<button class="btn btn-gold btn-sm" onclick="claimMission(${m.id})">دریافت</button>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('') || '<div class="empty-state"><div class="es-icon">📋</div><div class="es-text">مأموریتی برای این دوره وجود ندارد</div></div>';
+}
+
+function switchMissionTab(el, tab) {
+  document.querySelectorAll('#page-missions .tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  state.missionTab = tab;
+  renderMissions();
+}
+
+// VISITORS
+function renderVisitors() {
+  const list = document.getElementById('visitors-list');
+  const log = document.getElementById('visit-log');
+  if (!list) return;
+
+  list.innerHTML = FRIENDS.map(f => `
+    <div class="card friend-card card-hover" style="margin-bottom:10px">
+      <div class="friend-avatar">
+        ${f.emoji}
+        <div class="${f.online ? 'online-dot' : 'online-dot offline-dot'}"></div>
+      </div>
+      <div class="friend-info">
+        <div class="friend-name">${f.name}</div>
+        <div class="friend-meta">${f.animals} حیوان • ${f.lastSeen}</div>
+        <div style="font-size:10px;margin-top:2px;color:${f.online ? 'var(--green)' : 'var(--text2)'}">
+          ${f.online ? '🟢 آنلاین' : '⚫ آفلاین'}
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <button class="btn btn-primary btn-sm" onclick="visitFriend('${f.name}')">بازدید</button>
+        <button class="btn btn-glass btn-sm" onclick="giftFriend('${f.name}')">هدیه 🎁</button>
+      </div>
+    </div>
+  `).join('');
+
+  if (log) {
+    log.innerHTML = [
+      {emoji:'🐯',name:'Arash',time:'۱۵ دقیقه پیش',action:'از باغ وحش تو بازدید کرد'},
+      {emoji:'🦋',name:'Mina',time:'۲ ساعت پیش',action:'یه هدیه برات گذاشت'},
+      {emoji:'🐼',name:'Kamran',time:'دیروز',action:'از باغ وحش تو بازدید کرد'},
+    ].map(v => `
+      <div class="visit-log-item">
+        <div style="font-size:28px">${v.emoji}</div>
+        <div style="flex:1">
+          <div style="font-size:13px;font-weight:600">${v.name}</div>
+          <div style="font-size:12px;color:var(--text2)">${v.action}</div>
+        </div>
+        <div style="font-size:11px;color:var(--text2)">${v.time}</div>
+      </div>
+    `).join('');
+  }
+}
+
+// CLAN
+function renderClan() {
+  const content = document.getElementById('clan-content');
+  if (!content) return;
+  const xpPct = Math.round(CLAN.xp / CLAN.xp_next * 100);
+  content.innerHTML = `
+    <!-- Banner -->
+    <div class="clan-banner">
+      <div class="clan-emoji">${CLAN.emoji}</div>
+      <div class="clan-name">${CLAN.name}</div>
+      <div class="clan-meta">لول ${CLAN.level} • رتبه #${CLAN.rank} • ${CLAN.score.toLocaleString('fa')} امتیاز</div>
+      <div style="margin-top:12px;font-size:11px;color:rgba(255,255,255,0.5);margin-bottom:4px">XP کلن</div>
+      <div class="prog-wrap"><div class="prog-bar prog-clan" style="width:${xpPct}%"></div></div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.4);margin-top:4px">${CLAN.xp.toLocaleString('fa')} / ${CLAN.xp_next.toLocaleString('fa')}</div>
+    </div>
+
+    <!-- Stats Row -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px">
+      <div class="card" style="padding:12px;text-align:center">
+        <div style="font-size:22px;margin-bottom:4px">👥</div>
+        <div style="font-size:18px;font-weight:800;color:var(--primary)">${CLAN.members}</div>
+        <div style="font-size:10px;color:var(--text2)">عضو</div>
+      </div>
+      <div class="card" style="padding:12px;text-align:center">
+        <div style="font-size:22px;margin-bottom:4px">🏆</div>
+        <div style="font-size:18px;font-weight:800;color:var(--gold)">#${CLAN.rank}</div>
+        <div style="font-size:10px;color:var(--text2)">رتبه</div>
+      </div>
+      <div class="card" style="padding:12px;text-align:center">
+        <div style="font-size:22px;margin-bottom:4px">⭐</div>
+        <div style="font-size:18px;font-weight:800;color:var(--green)">${CLAN.level}</div>
+        <div style="font-size:10px;color:var(--text2)">لول</div>
+      </div>
+    </div>
+
+    <!-- War Status -->
+    ${CLAN.war.status === 'active' ? `
+    <div class="card" style="padding:14px;margin-bottom:14px;background:linear-gradient(135deg,rgba(233,69,96,0.1),rgba(124,58,237,0.1));border-color:rgba(233,69,96,0.3);cursor:pointer" onclick="showSubPage('war')">
+      <div style="font-size:13px;font-weight:800;color:var(--accent);margin-bottom:8px">⚔️ نبرد در جریان!</div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div style="text-align:center"><div style="font-size:24px">${CLAN.emoji}</div><div style="font-size:11px">ما</div></div>
+        <div style="text-align:center">
+          <div style="font-size:14px;font-weight:800;color:var(--green)">${CLAN.war.our_score.toLocaleString('fa')}</div>
+          <div style="font-size:12px;color:var(--text2)">VS</div>
+          <div style="font-size:14px;font-weight:800;color:var(--accent)">${CLAN.war.enemy_score.toLocaleString('fa')}</div>
+        </div>
+        <div style="text-align:center"><div style="font-size:24px">${CLAN.war.enemy_emoji}</div><div style="font-size:11px">${CLAN.war.enemy_clan}</div></div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text2)">
+        <span>⏰ زمان باقیمانده:</span>
+        <span style="color:var(--accent);font-weight:700">${CLAN.war.time_left}</span>
+        <span style="margin-right:auto;font-size:14px;color:var(--text2)">›</span>
+      </div>
+    </div>
+    ` : ''}
+
+    <!-- Members -->
+    <div class="section-title">اعضا (${CLAN.members}/${CLAN.max_members})</div>
+    <div class="card" style="padding:0 14px;margin-bottom:14px">
+      ${CLAN.members_list.map(m => `
+        <div class="member-row">
+          <div class="member-avatar">${m.emoji}</div>
+          <div class="member-info">
+            <div class="member-name">${m.name}</div>
+            <div class="member-role">لول ${m.level}</div>
+          </div>
+          <span class="role-badge ${m.role==='رهبر'?'role-leader':m.role==='معاون'?'role-vice':'role-member'}">${m.role}</span>
+        </div>
+      `).join('')}
+      <div style="text-align:center;padding:10px 0">
+        <span style="font-size:12px;color:var(--text2)">و ${CLAN.members - CLAN.members_list.length} عضو دیگر...</span>
+      </div>
+    </div>
+
+    <!-- Clan Chat -->
+    <div class="section-title">چت کلن</div>
+    <div class="card" style="padding:14px;margin-bottom:14px">
+      ${CLAN.chat.map(msg => `
+        <div class="chat-msg">
+          <div class="chat-avatar">💬</div>
+          <div class="chat-bubble">
+            <div class="chat-user">${msg.user}</div>
+            <div class="chat-text">${msg.msg}</div>
+            <div class="chat-time">${msg.time}</div>
+          </div>
+        </div>
+      `).join('')}
+      <div style="margin-top:10px;display:flex;gap:8px">
+        <input type="text" placeholder="پیامت رو بنویس..." style="flex:1;background:rgba(255,255,255,0.05);border:1px solid var(--card-border);border-radius:10px;padding:8px 12px;color:var(--text);font-family:inherit;font-size:13px;outline:none">
+        <button class="btn btn-primary btn-sm" onclick="sendClanChat()">ارسال</button>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+      <button class="btn btn-glass btn-full" onclick="showSubPage('war')">⚔️ نبرد کلن</button>
+      <button class="btn btn-glass btn-full" onclick="showPage('adventure')">🗺️ ماجراجویی</button>
+    </div>
+  `;
+}
+
+// ==============================
+// ACTIONS
+// ==============================
+function doAction(action, animalId) {
+  const a = state.animals.find(x => x.id === animalId);
+  if (!a) return;
+
+  addRipple(event.currentTarget || event.target);
+
+  const costs = {feed:30, medicine:80, play:0, clean:20, pet:0, sleep:0};
+  const cost = costs[action] || 0;
+
+  if (cost > state.coins) {
+    showToast('🪙 سکه کافی نداری!');
+    return;
+  }
+
+  state.coins -= cost;
+  updateCoins();
+
+  switch(action) {
+    case 'feed':
+      a.hunger = Math.min(100, a.hunger + 25);
+      a.happiness = Math.min(100, a.happiness + 5);
+      showToast(`🍖 ${a.nickname} خوشش اومد!`);
+      break;
+    case 'medicine':
+      a.health = Math.min(100, a.health + 30);
+      showToast(`💊 ${a.nickname} سالم‌تر شد!`);
+      break;
+    case 'play':
+      a.happiness = Math.min(100, a.happiness + 20);
+      a.energy = Math.max(0, a.energy - 10);
+      showToast(`🎮 ${a.nickname} خوش گذشت!`);
+      break;
+    case 'clean':
+      a.cleanliness = Math.min(100, a.cleanliness + 30);
+      a.happiness = Math.min(100, a.happiness + 5);
+      showToast(`🛁 ${a.nickname} تمیز شد!`);
+      break;
+    case 'pet':
+      a.happiness = Math.min(100, a.happiness + 10);
+      showToast(`🤗 ${a.nickname} دوستت داره!`);
+      break;
+    case 'sleep':
+      a.energy = Math.min(100, a.energy + 30);
+      showToast(`😴 ${a.nickname} استراحت کرد!`);
+      break;
+  }
+
+  // Re-render detail
+  openDetail(animalId);
+
+  try { window.Telegram.WebApp.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+}
+
+function performTrick(trick, animalId) {
+  const a = state.animals.find(x => x.id === animalId);
+  showToast(`🎓 ${a ? a.nickname : ''} "${trick}" رو اجرا کرد!`);
+  try { window.Telegram.WebApp.HapticFeedback.impactOccurred('light'); } catch(e) {}
+}
+
+function buyItem(idx, tab) {
+  const item = SHOP_CATEGORIES[tab][idx];
+  if (!item) return;
+  const currency = item.gems ? 'gems' : 'coins';
+  if (state[currency] < item.price) {
+    showToast(item.gems ? '💎 جم کافی نداری!' : '🪙 سکه کافی نداری!');
+    return;
+  }
+  state[currency] -= item.price;
+  updateCoins();
+  showToast(`${item.emoji} ${item.name} خریداری شد!`);
+  try { window.Telegram.WebApp.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+}
+
+function buyMysteryBox() {
+  if (state.gems < 10) { showToast('💎 جم کافی نداری!'); return; }
+  state.gems -= 10;
+  updateCoins();
+  const animals = ['🦅','🦎','🦝','🦫','🦦'];
+  const picked = animals[Math.floor(Math.random()*animals.length)];
+  showToast(`${picked} حیوان جدیدی پیدا کردی!`);
+}
+
+function claimMission(id) {
+  const m = MISSIONS.find(x => x.id === id);
+  if (!m) return;
+  state.coins += m.reward;
+  updateCoins();
+  m.done = false;
+  m.claimed = true;
+  showToast(`🪙 ${m.reward} سکه دریافت شد!`);
+  renderMissions();
+  try { window.Telegram.WebApp.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+}
+
+function claimBonus() {
+  state.coins += 200;
+  state.gems += 2;
+  updateCoins();
+  showToast('🎁 جایزه روزانه دریافت شد!');
+  try { window.Telegram.WebApp.HapticFeedback.notificationOccurred('success'); } catch(e) {}
+}
+
+function visitFriend(name) {
+  showToast(`🏡 در حال بازدید از باغ وحش ${name}...`);
+}
+
+function giftFriend(name) {
+  showToast(`🎁 هدیه برای ${name} ارسال شد!`);
+}
+
+function joinBattle() {
+  showToast('⚔️ وارد نبرد شدی!');
+  try { window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy'); } catch(e) {}
+}
+
+function startAdventure() {
+  showToast('🗡️ ماجراجویی شروع شد!');
+  try { window.Telegram.WebApp.HapticFeedback.impactOccurred('medium'); } catch(e) {}
+}
+
+function fightBoss() {
+  showToast('🔥 در حال نبرد با باس...');
+  try { window.Telegram.WebApp.HapticFeedback.impactOccurred('heavy'); } catch(e) {}
+}
+
+function sendClanChat() {
+  showToast('💬 پیام ارسال شد!');
+}
+
+function openShopForAccessory() {
+  state.shopTab = 'accessory';
+  showPage('shop');
+}
+
+function openSupport() {
+  try { window.Telegram.WebApp.openTelegramLink('https://t.me/zooboom_support'); } catch(e) {}
+}
+
+// ==============================
+// FILTER ANIMALS
+// ==============================
+function filterAnimals(val) {
+  renderAnimalsList(document.querySelector('#page-animals .tab-btn.active')?.dataset?.filter || 'all', val);
+}
+
+function filterAnimalTab(el, filter) {
+  document.querySelectorAll('#page-animals .tab-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  el.dataset.filter = filter;
+  renderAnimalsList(filter, document.getElementById('animal-search')?.value || '');
+}
+
+// ==============================
+// SETTINGS
+// ==============================
+function toggleSetting(el, key) {
+  el.classList.toggle('on');
+  state.settings[key] = el.classList.contains('on');
+  showToast(state.settings[key] ? `✅ ${key} فعال شد` : `❌ ${key} غیرفعال شد`);
+  try { window.Telegram.WebApp.HapticFeedback.selectionChanged(); } catch(e) {}
+}
+
+function selectLang(el, lang) {
+  document.querySelectorAll('.lang-option').forEach(o => {
+    o.classList.remove('selected');
+    const tick = o.querySelector('span:last-child');
+    if (tick && tick.textContent === '✓') o.removeChild(tick);
+  });
+  el.classList.add('selected');
+  const tick = document.createElement('span');
+  tick.style.cssText = 'margin-right:auto;color:var(--primary);font-size:14px';
+  tick.textContent = '✓';
+  el.appendChild(tick);
+  showToast('زبان تغییر یافت');
+}
+
+// ==============================
+// UI HELPERS
+// ==============================
+function updateCoins() {
+  document.getElementById('coin-count').textContent = state.coins.toLocaleString('fa');
+  document.getElementById('gem-count').textContent = state.gems.toLocaleString('fa');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function openModal(content) {
+  document.getElementById('modal-body').innerHTML = content;
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function addRipple(el) {
+  if (!el || !el.style) return;
+  const r = document.createElement('span');
+  r.className = 'ripple';
+  const rect = el.getBoundingClientRect ? el.getBoundingClientRect() : {width:40,height:40};
+  const size = Math.max(rect.width, rect.height);
+  r.style.cssText = `width:${size}px;height:${size}px;margin-left:${-size/2}px;margin-top:${-size/2}px`;
+  el.appendChild(r);
+  setTimeout(() => r.remove(), 600);
+}
+
+// ==============================
+// WAR TIMER
+// ==============================
+let warSeconds = 12*3600 + 45*60 + 30;
+function updateWarTimer() {
+  const h = Math.floor(warSeconds / 3600);
+  const m = Math.floor((warSeconds % 3600) / 60);
+  const s = warSeconds % 60;
+  const fmt = (n) => String(n).padStart(2,'0');
+  const el = document.getElementById('war-timer');
+  if (el) el.textContent = `${fmt(h)}:${fmt(m)}:${fmt(s)}`;
+  if (warSeconds > 0) warSeconds--;
+}
+setInterval(updateWarTimer, 1000);
+
+// ==============================
+// BUTTON RIPPLES (global)
+// ==============================
+document.addEventListener('click', function(e) {
+  const btn = e.target.closest('.btn');
+  if (btn) addRipple(btn);
+});
+
+// ==============================
+// INIT
+// ==============================
+function init() {
+  renderFarmGrid();
+  renderAnimalsList();
+  renderShop();
+  renderMissions();
+  renderVisitors();
+  renderClan();
+}
+
+init();
+
+// Try to fetch from API
+async function fetchFromAPI() {
+  try {
+    const res = await fetch(API_BASE + '/user', {
+      headers: { 'X-Telegram-Init-Data': window.Telegram?.WebApp?.initData || '' }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.coins) { state.coins = data.coins; updateCoins(); }
+    if (data.gems) { state.gems = data.gems; updateCoins(); }
+    if (data.animals) { state.animals = data.animals; renderFarmGrid(); renderAnimalsList(); }
+  } catch(e) {
+    // Use mock data
+  }
+}
+
+fetchFromAPI();
+</script>
+</body>
+</html>

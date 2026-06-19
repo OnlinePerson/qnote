@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  zoo-bot:
+    build: ./bot
+    env_file: .env
+    volumes:
+      - zoo-data:/data
+    restart: unless-stopped
+
+  zoo-api:
+    build: ./api
+    env_file: .env
+    volumes:
+      - zoo-data:/data
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+
+volumes:
+  zoo-data:
