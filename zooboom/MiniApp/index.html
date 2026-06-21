@@ -11,82 +11,78 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#04040E;--surface:rgba(8,8,28,0.88);--surface2:rgba(12,12,40,0.95);
-  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.14);
-  --primary:#7C3AED;--primary-l:#A78BFA;--primary-d:#5B21B6;--primary-g:rgba(124,58,237,.35);
-  --pink:#EC4899;--pink-l:#F9A8D4;--pink-g:rgba(236,72,153,.35);
-  --cyan:#06B6D4;--cyan-l:#67E8F9;--cyan-g:rgba(6,182,212,.35);
-  --gold:#F59E0B;--gold-l:#FCD34D;--gold-g:rgba(245,158,11,.35);
-  --green:#10B981;--red:#EF4444;--orange:#F97316;--blue:#3B82F6;
-  --text:#E2E8F0;--text2:#94A3B8;--text3:#475569;
-  --nav-h:70px;--top-h:58px;
+  --bg:#04040E;--sur:rgba(8,8,28,.88);--sur2:rgba(12,12,40,.96);
+  --bd:rgba(255,255,255,.07);--bd2:rgba(255,255,255,.14);
+  --p:#7C3AED;--pl:#A78BFA;--pd:#5B21B6;--pg:rgba(124,58,237,.35);
+  --pk:#EC4899;--pkl:#F9A8D4;--pklg:rgba(236,72,153,.35);
+  --cy:#06B6D4;--cyl:#67E8F9;--cyg:rgba(6,182,212,.35);
+  --go:#F59E0B;--gol:#FCD34D;--gog:rgba(245,158,11,.35);
+  --gr:#10B981;--re:#EF4444;--or:#F97316;--bl:#3B82F6;
+  --tx:#E2E8F0;--tx2:#94A3B8;--tx3:#475569;
+  --nh:70px;--th:58px;
   --r:16px;--rs:10px;--rl:24px;--rxl:32px;
   --font:'Vazirmatn',sans-serif;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.5}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:var(--font);font-size:14px;line-height:1.5}
 ::-webkit-scrollbar{width:2px}
-::-webkit-scrollbar-thumb{background:var(--primary);border-radius:2px}
+::-webkit-scrollbar-thumb{background:var(--p);border-radius:2px}
 
-/* ─── BACKGROUND ORBS ─── */
+/* ── BG ── */
 #bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.1;animation:drift linear infinite}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.1;animation:fl linear infinite}
 .o1{width:320px;height:320px;background:radial-gradient(circle,#7C3AED,transparent);top:-80px;right:-60px;animation-duration:22s}
-.o2{width:260px;height:260px;background:radial-gradient(circle,#EC4899,transparent);bottom:30%;left:-60px;animation-duration:28s;animation-delay:-9s}
-.o3{width:200px;height:200px;background:radial-gradient(circle,#06B6D4,transparent);bottom:-40px;right:25%;animation-duration:19s;animation-delay:-5s}
-@keyframes drift{0%{transform:translate(0,0) scale(1)}25%{transform:translate(14px,-18px) scale(1.06)}50%{transform:translate(-10px,14px) scale(.94)}75%{transform:translate(18px,8px) scale(1.08)}100%{transform:translate(0,0) scale(1)}}
+.o2{width:260px;height:260px;background:radial-gradient(circle,#EC4899,transparent);bottom:28%;left:-55px;animation-duration:27s;animation-delay:-9s}
+.o3{width:200px;height:200px;background:radial-gradient(circle,#06B6D4,transparent);bottom:-40px;right:22%;animation-duration:19s;animation-delay:-5s}
+@keyframes fl{0%{transform:translate(0,0) scale(1)}25%{transform:translate(13px,-18px) scale(1.06)}50%{transform:translate(-10px,13px) scale(.94)}75%{transform:translate(17px,8px) scale(1.07)}100%{transform:translate(0,0) scale(1)}}
 #bg::after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(124,58,237,.025) 39px,rgba(124,58,237,.025) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(124,58,237,.025) 39px,rgba(124,58,237,.025) 40px)}
 
-/* ─── HEADER ─── */
-#hdr{position:fixed;top:0;left:0;right:0;height:var(--top-h);z-index:100;background:rgba(4,4,14,.93);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
-.hdr-logo{display:flex;align-items:center;gap:9px}
-.hdr-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--primary),var(--pink));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 14px var(--primary-g)}
-.hdr-name{font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--primary-l),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px}
-.coin-chip{display:flex;align-items:center;gap:5px;background:var(--surface2);border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:6px 13px;font-size:13px;font-weight:700}
-.coin-chip span{color:var(--gold-l)}
+/* ── HEADER ── */
+#hdr{position:fixed;top:0;left:0;right:0;height:var(--th);z-index:100;background:rgba(4,4,14,.93);backdrop-filter:blur(24px);border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;padding:0 16px}
+.logo{display:flex;align-items:center;gap:9px}
+.logo-ico{width:36px;height:36px;background:linear-gradient(135deg,var(--p),var(--pk));border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 4px 14px var(--pg)}
+.logo-txt{font-size:20px;font-weight:900;background:linear-gradient(135deg,var(--pl),var(--pk));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.5px}
+.coin-chip{display:flex;align-items:center;gap:5px;background:var(--sur2);border:1px solid rgba(245,158,11,.3);border-radius:20px;padding:6px 13px;font-size:13px;font-weight:700}
+.coin-chip .cv{color:var(--gol)}
 
-/* ─── NAV ─── */
-#nav{position:fixed;bottom:0;left:0;right:0;height:var(--nav-h);z-index:100;background:rgba(4,4,14,.97);backdrop-filter:blur(32px);-webkit-backdrop-filter:blur(32px);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:0 4px;padding-bottom:env(safe-area-inset-bottom,0)}
-.nb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 10px;border-radius:14px;cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);min-width:54px;border:none;background:transparent;color:var(--text3);position:relative;font-family:var(--font)}
+/* ── NAV ── */
+#nav{position:fixed;bottom:0;left:0;right:0;height:var(--nh);z-index:100;background:rgba(4,4,14,.97);backdrop-filter:blur(32px);border-top:1px solid var(--bd);display:flex;align-items:center;justify-content:space-around;padding:0 4px;padding-bottom:env(safe-area-inset-bottom,0)}
+.nb{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px 10px;border-radius:14px;cursor:pointer;transition:all .2s cubic-bezier(.34,1.56,.64,1);min-width:54px;border:none;background:transparent;color:var(--tx3);position:relative;font-family:var(--font)}
 .nb svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:all .2s}
 .nb .nl{font-size:10px;font-weight:600;transition:color .2s;white-space:nowrap}
-.nb.active{color:var(--primary-l)}
-.nb.active svg{filter:drop-shadow(0 0 6px var(--primary))}
-.nb::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:linear-gradient(90deg,var(--primary),var(--pink));border-radius:0 0 3px 3px;transition:width .2s}
+.nb.active{color:var(--pl)}
+.nb.active svg{filter:drop-shadow(0 0 6px var(--p))}
+.nb::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:0;height:2px;background:linear-gradient(90deg,var(--p),var(--pk));border-radius:0 0 3px 3px;transition:width .2s}
 .nb.active::before{width:28px}
-.nb.add-btn{margin-top:-22px}
-.add-circle{width:52px;height:52px;background:linear-gradient(135deg,var(--primary),var(--pink));border-radius:16px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px var(--primary-g),0 0 0 3px rgba(124,58,237,.2)}
-.add-circle svg{width:26px;height:26px;stroke:#fff}
-.nb.add-btn:active .add-circle{transform:scale(.92);box-shadow:0 4px 12px var(--primary-g)}
 
-/* ─── PAGES ─── */
-#app{position:fixed;top:var(--top-h);bottom:var(--nav-h);left:0;right:0;z-index:10;overflow:hidden}
-.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;opacity:0;pointer-events:none;transform:translateX(10px);transition:opacity .22s ease,transform .22s ease}
+/* ── PAGES ── */
+#app{position:fixed;top:var(--th);bottom:var(--nh);left:0;right:0;z-index:10;overflow:hidden}
+.page{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;opacity:0;pointer-events:none;transform:translateX(10px);transition:opacity .22s,transform .22s}
 .page.active{opacity:1;pointer-events:all;transform:none}
-.pi{padding:16px;padding-bottom:24px}
+.pi{padding:16px;padding-bottom:28px}
 
-/* ─── SECTION TITLE ─── */
+/* ── SECTION ── */
 .sh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .st{font-size:16px;font-weight:800;display:flex;align-items:center;gap:8px}
-.st::before{content:'';display:block;width:4px;height:20px;background:linear-gradient(to bottom,var(--primary),var(--pink));border-radius:2px;flex-shrink:0}
-.sl{font-size:12px;color:var(--primary-l);font-weight:600;cursor:pointer}
+.st::before{content:'';display:block;width:4px;height:20px;background:linear-gradient(to bottom,var(--p),var(--pk));border-radius:2px;flex-shrink:0}
+.sl{font-size:12px;color:var(--pl);font-weight:600;cursor:pointer;padding:4px 0}
 
-/* ─── CARDS ─── */
-.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
+/* ── CARD ── */
+.card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);backdrop-filter:blur(20px)}
 
-/* ─── PROGRESS ─── */
+/* ── PROGRESS ── */
 .pt{background:rgba(255,255,255,.06);border-radius:20px;overflow:hidden}
 .pf{border-radius:20px;transition:width .6s cubic-bezier(.34,1.56,.64,1);position:relative}
 .pf::after{content:'';position:absolute;top:0;right:0;width:8px;height:100%;background:rgba(255,255,255,.35);filter:blur(2px);border-radius:0 20px 20px 0}
-.ph{background:linear-gradient(90deg,#059669,#10B981);box-shadow:0 0 8px rgba(16,185,129,.5)}
+.ph {background:linear-gradient(90deg,#059669,#10B981);box-shadow:0 0 8px rgba(16,185,129,.5)}
 .phu{background:linear-gradient(90deg,#EA580C,#F97316);box-shadow:0 0 8px rgba(249,115,22,.5)}
-.pp{background:linear-gradient(90deg,#DB2777,#EC4899);box-shadow:0 0 8px rgba(236,72,153,.5)}
-.pe{background:linear-gradient(90deg,#1D4ED8,#3B82F6);box-shadow:0 0 8px rgba(59,130,246,.5)}
-.pc{background:linear-gradient(90deg,#0891B2,#06B6D4);box-shadow:0 0 8px rgba(6,182,212,.5)}
-.px{background:linear-gradient(90deg,var(--primary-d),var(--primary-l))}
+.pp {background:linear-gradient(90deg,#DB2777,#EC4899);box-shadow:0 0 8px rgba(236,72,153,.5)}
+.pe {background:linear-gradient(90deg,#1D4ED8,#3B82F6);box-shadow:0 0 8px rgba(59,130,246,.5)}
+.pc {background:linear-gradient(90deg,#0891B2,#06B6D4);box-shadow:0 0 8px rgba(6,182,212,.5)}
+.px {background:linear-gradient(90deg,var(--pd),var(--pl))}
 
-/* ─── RARITY ─── */
-.rc{color:#94A3B8;border-color:rgba(100,116,139,.4);background:rgba(100,116,139,.15)}
+/* ── RARITY ── */
+.rc{color:#94A3B8;border-color:rgba(100,116,139,.4);background:rgba(100,116,139,.14)}
 .ru{color:#4ADE80;border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.12)}
 .rr{color:#60A5FA;border-color:rgba(59,130,246,.4);background:rgba(59,130,246,.12)}
 .re{color:#C084FC;border-color:rgba(168,85,247,.4);background:rgba(168,85,247,.12)}
@@ -94,205 +90,205 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 .rm{color:#F9A8D4;border-color:rgba(236,72,153,.4);background:rgba(236,72,153,.12)}
 .rtag{display:inline-flex;align-items:center;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px;border:1px solid}
 
-/* ─── BUTTONS ─── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:12px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;border:none;transition:all .15s cubic-bezier(.34,1.56,.64,1);position:relative;overflow:hidden;min-height:44px;white-space:nowrap}
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 18px;border-radius:12px;font-size:13px;font-weight:700;font-family:var(--font);cursor:pointer;border:none;transition:all .15s cubic-bezier(.34,1.56,.64,1);min-height:44px;white-space:nowrap;position:relative;overflow:hidden}
 .btn:active{transform:scale(.94)}
-.btn-p{background:linear-gradient(135deg,var(--primary),var(--primary-d));color:#fff;box-shadow:0 4px 16px var(--primary-g)}
-.btn-g{background:linear-gradient(135deg,var(--gold),#D97706);color:#000;font-weight:800;box-shadow:0 4px 16px var(--gold-g)}
-.btn-gl{background:var(--surface2);border:1px solid var(--border2);color:var(--text)}
-.btn-sm{padding:7px 14px;font-size:12px;min-height:36px}
-.btn-lg{padding:14px 24px;font-size:16px;min-height:52px;border-radius:16px}
-.btn-fw{width:100%}
+.btn:disabled{opacity:.5;pointer-events:none}
+.bp{background:linear-gradient(135deg,var(--p),var(--pd));color:#fff;box-shadow:0 4px 16px var(--pg)}
+.bg{background:linear-gradient(135deg,var(--go),#D97706);color:#000;font-weight:800;box-shadow:0 4px 16px var(--gog)}
+.bgl{background:var(--sur2);border:1px solid var(--bd2);color:var(--tx)}
+.bsm{padding:7px 14px;font-size:12px;min-height:36px}
+.blg{padding:14px 24px;font-size:16px;min-height:52px;border-radius:16px}
+.bfw{width:100%}
 
-/* ─── RING ─── */
+/* ── SVG RING ── */
 .ring-w{position:relative;display:inline-flex;align-items:center;justify-content:center}
 .ring-svg{transform:rotate(-90deg)}
-.ring-track{fill:none;stroke:rgba(255,255,255,.08)}
-.ring-fill{fill:none;stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.34,1.56,.64,1)}
+.ring-t{fill:none;stroke:rgba(255,255,255,.08)}
+.ring-f{fill:none;stroke-linecap:round;transition:stroke-dashoffset .8s cubic-bezier(.34,1.56,.64,1)}
 
-/* ─── ANIMAL CARD ─── */
-.acard{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);backdrop-filter:blur(20px);overflow:hidden;cursor:pointer;transition:transform .18s,box-shadow .18s;position:relative}
-.acard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
-.acard.rc-b::before{background:linear-gradient(90deg,#64748B,transparent)}
-.acard.ru-b::before{background:linear-gradient(90deg,#22C55E,transparent);box-shadow:0 4px 20px rgba(34,197,94,.18)}
-.acard.rr-b{border-color:rgba(59,130,246,.2)}
-.acard.rr-b::before{background:linear-gradient(90deg,#3B82F6,transparent)}
-.acard.re-b{border-color:rgba(168,85,247,.25)}
-.acard.re-b::before{background:linear-gradient(90deg,#A855F7,transparent)}
-.acard.rl-b{border-color:rgba(245,158,11,.25)}
-.acard.rl-b::before{background:linear-gradient(90deg,#F59E0B,transparent)}
-.acard.rm-b{border-color:rgba(236,72,153,.3)}
-.acard.rm-b::before{background:linear-gradient(90deg,#EC4899,transparent)}
-.acard:active{transform:scale(.97)}
+/* ── ANIMAL CARD ── */
+.ac{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rl);backdrop-filter:blur(20px);overflow:hidden;cursor:pointer;transition:transform .18s;position:relative}
+.ac::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.ac.s-c::before{background:linear-gradient(90deg,#64748B,transparent)}
+.ac.s-u{border-color:rgba(34,197,94,.2)}.ac.s-u::before{background:linear-gradient(90deg,#22C55E,transparent)}
+.ac.s-r{border-color:rgba(59,130,246,.2)}.ac.s-r::before{background:linear-gradient(90deg,#3B82F6,transparent)}
+.ac.s-e{border-color:rgba(168,85,247,.25)}.ac.s-e::before{background:linear-gradient(90deg,#A855F7,transparent)}
+.ac.s-l{border-color:rgba(245,158,11,.25)}.ac.s-l::before{background:linear-gradient(90deg,#F59E0B,transparent)}
+.ac.s-m{border-color:rgba(236,72,153,.3)}.ac.s-m::before{background:linear-gradient(90deg,#EC4899,transparent)}
+.ac:active{transform:scale(.97)}
 .acb{padding:14px}
 .aring{display:flex;justify-content:center;margin-bottom:10px}
 .anrow{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}
 .aname{font-size:13px;font-weight:700}
-.alv{display:inline-flex;align-items:center;gap:2px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);border-radius:8px;padding:2px 7px;font-size:11px;font-weight:700;color:var(--primary-l)}
-.aspecies{font-size:11px;color:var(--text2);margin-bottom:9px}
+.alv{display:inline-flex;align-items:center;gap:2px;background:rgba(124,58,237,.2);border:1px solid rgba(124,58,237,.4);border-radius:8px;padding:2px 7px;font-size:11px;font-weight:700;color:var(--pl)}
+.aspec{font-size:11px;color:var(--tx2);margin-bottom:9px}
 .asm{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-bottom:6px}
 .smi{display:flex;align-items:center;gap:5px}
-.smi-i{font-size:11px;line-height:1}
 .smi-b{flex:1}
 .smi-b .pt{height:4px}
+.sick-b{display:inline-flex;align-items:center;gap:4px;background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.4);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:700;color:#FCA5A5}
 
-/* ─── HOME BANNER ─── */
+/* ── HOME ── */
 .banner{background:linear-gradient(135deg,rgba(124,58,237,.22),rgba(236,72,153,.14));border:1px solid rgba(124,58,237,.28);border-radius:var(--rxl);padding:20px;margin-bottom:18px;position:relative;overflow:hidden}
 .banner::after{content:'🦁';position:absolute;bottom:-14px;left:-6px;font-size:90px;opacity:.12;transform:scaleX(-1);pointer-events:none}
-.bn-title{font-size:22px;font-weight:900;background:linear-gradient(135deg,#fff,var(--primary-l));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
-.bn-sub{font-size:13px;color:var(--text2);margin-bottom:16px}
-.bn-stats{display:flex;gap:16px}
+.bn-t{font-size:21px;font-weight:900;background:linear-gradient(135deg,#fff,var(--pl));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:4px}
+.bn-s{font-size:13px;color:var(--tx2);margin-bottom:14px}
+.bn-stats{display:flex;gap:18px;flex-wrap:wrap}
 .bn-sv{font-size:20px;font-weight:900}
-.bn-sl{font-size:11px;color:var(--text2)}
+.bn-sl{font-size:11px;color:var(--tx2)}
 
-/* ─── DAILY CARD ─── */
 .daily{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(245,158,11,.14),rgba(217,119,6,.08));border:1px solid rgba(245,158,11,.28);border-radius:var(--rl);padding:15px;margin-bottom:18px}
-.daily-ico{width:48px;height:48px;background:linear-gradient(135deg,var(--gold),#D97706);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 4px 14px var(--gold-g)}
-.daily-info{flex:1}
+.daily-ico{width:48px;height:48px;background:linear-gradient(135deg,var(--go),#D97706);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0;box-shadow:0 4px 14px var(--gog)}
 .daily-t{font-size:14px;font-weight:700;margin-bottom:2px}
-.daily-s{font-size:12px;color:var(--text2)}
+.daily-s{font-size:12px;color:var(--tx2)}
 
-/* ─── WEATHER ─── */
-.wx{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:13px;margin-bottom:18px}
+.wx{display:flex;align-items:center;gap:12px;background:var(--sur);border:1px solid var(--bd);border-radius:var(--rl);padding:13px;margin-bottom:18px}
 .wx-ico{font-size:30px;line-height:1}
 .wx-t{font-size:14px;font-weight:700}
-.wx-s{font-size:12px;color:var(--text2)}
+.wx-s{font-size:12px;color:var(--tx2)}
 
-/* ─── QUICK ANIMALS SCROLL ─── */
-.qa-scroll{display:flex;gap:11px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:8px;scrollbar-width:none}
-.qa-scroll::-webkit-scrollbar{display:none}
-.qa{flex-shrink:0;width:108px;background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:13px;text-align:center;cursor:pointer;transition:transform .15s}
+.qa-sc{display:flex;gap:11px;overflow-x:auto;scrollbar-width:none;padding-bottom:8px}
+.qa-sc::-webkit-scrollbar{display:none}
+.qa{flex-shrink:0;width:108px;background:var(--sur);border:1px solid var(--bd);border-radius:var(--rl);padding:13px;text-align:center;cursor:pointer;transition:transform .15s}
 .qa:active{transform:scale(.95)}
 .qa-em{font-size:36px;display:block;margin-bottom:6px}
 .qa-n{font-size:12px;font-weight:600;margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .qa-hb{background:rgba(255,255,255,.07);border-radius:10px;height:4px;overflow:hidden}
-.qa-hf{height:100%;border-radius:10px;transition:width .5s}
+.qa-hf{height:100%;border-radius:10px}
 
-/* ─── EMPTY ─── */
-.empty-zoo{background:var(--surface);border:2px dashed rgba(124,58,237,.28);border-radius:var(--rxl);padding:40px 20px;text-align:center}
-.ez-em{font-size:60px;display:block;margin-bottom:14px}
-.ez-t{font-size:18px;font-weight:800;margin-bottom:8px}
-.ez-s{font-size:13px;color:var(--text2);margin-bottom:20px}
-
-/* ─── SEARCH ─── */
+/* ── SEARCH / FILTER ── */
 .sw{position:relative;margin-bottom:13px}
-.si{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:12px 16px 12px 44px;font-size:14px;font-family:var(--font);color:var(--text);outline:none;transition:border-color .2s}
-.si:focus{border-color:rgba(124,58,237,.5);box-shadow:0 0 0 3px rgba(124,58,237,.1)}
-.si::placeholder{color:var(--text3)}
-.s-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--text3)}
+.sinp{width:100%;background:var(--sur2);border:1px solid var(--bd);border-radius:14px;padding:12px 16px 12px 44px;font-size:14px;font-family:var(--font);color:var(--tx);outline:none;transition:border-color .2s}
+.sinp:focus{border-color:rgba(124,58,237,.5);box-shadow:0 0 0 3px rgba(124,58,237,.1)}
+.sinp::placeholder{color:var(--tx3)}
+.s-ico{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--tx3)}
 .chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:14px}
 .chips::-webkit-scrollbar{display:none}
-.chip{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;font-family:var(--font);cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text2);transition:all .15s}
-.chip.active{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.5);color:var(--primary-l)}
+.chip{flex-shrink:0;padding:7px 14px;border-radius:20px;font-size:12px;font-weight:600;font-family:var(--font);cursor:pointer;border:1px solid var(--bd);background:var(--sur2);color:var(--tx2);transition:all .15s}
+.chip.active{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.5);color:var(--pl)}
 .ag{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-/* ─── SHOP ─── */
-.shop-feat{background:linear-gradient(135deg,rgba(6,182,212,.18),rgba(124,58,237,.13));border:1px solid rgba(6,182,212,.28);border-radius:var(--rxl);padding:20px;margin-bottom:20px;text-align:center}
-.sf-em{font-size:60px;display:block;margin-bottom:10px}
-.sf-t{font-size:18px;font-weight:800;margin-bottom:4px}
-.sf-s{font-size:12px;color:var(--text2);margin-bottom:16px}
-.scats{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
-.scats::-webkit-scrollbar{display:none}
-.scat{flex-shrink:0;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text2);transition:all .15s}
-.scat.active{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.5);color:var(--primary-l)}
+/* ── SHOP ── */
+.shop-cats{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none}
+.shop-cats::-webkit-scrollbar{display:none}
+.scat{flex-shrink:0;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;border:1px solid var(--bd);background:var(--sur2);color:var(--tx2);transition:all .15s}
+.scat.active{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.5);color:var(--pl)}
 .sgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
-.si-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:14px;text-align:center;cursor:pointer;transition:transform .15s}
+.si-card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rl);padding:14px;text-align:center;cursor:pointer;transition:transform .15s}
 .si-card:active{transform:scale(.96)}
-.si-em{font-size:40px;display:block;margin-bottom:7px}
-.si-n{font-size:13px;font-weight:700;margin-bottom:5px}
-.si-p{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--gold-l);background:rgba(245,158,11,.1);padding:3px 10px;border-radius:20px;margin-bottom:10px}
+.si-em{font-size:38px;display:block;margin-bottom:7px}
+.si-n{font-size:13px;font-weight:700;margin-bottom:3px}
+.si-d{font-size:11px;color:var(--tx2);margin-bottom:7px;line-height:1.4}
+.si-p{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:700;color:var(--gol);background:rgba(245,158,11,.1);padding:3px 10px;border-radius:20px;margin-bottom:10px}
 
-/* ─── PROFILE ─── */
+/* ── INVENTORY ── */
+.inv-grid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.inv-card{background:var(--sur);border:1px solid var(--bd);border-radius:var(--rl);padding:14px;position:relative}
+.inv-em{font-size:34px;display:block;margin-bottom:6px}
+.inv-n{font-size:13px;font-weight:700;margin-bottom:2px}
+.inv-d{font-size:11px;color:var(--tx2);margin-bottom:6px}
+.inv-qty{position:absolute;top:10px;left:10px;background:rgba(124,58,237,.3);border:1px solid rgba(124,58,237,.5);border-radius:20px;padding:2px 8px;font-size:11px;font-weight:700;color:var(--pl)}
+
+/* ── LEADERBOARD ── */
+.lb-row{display:flex;align-items:center;gap:12px;padding:13px;background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:8px;transition:all .15s}
+.lb-rank{font-size:16px;font-weight:900;width:28px;text-align:center;flex-shrink:0}
+.lb-rank.r1{color:var(--gol)}
+.lb-rank.r2{color:#CBD5E1}
+.lb-rank.r3{color:#B45309}
+.lb-av{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--pk));display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lb-sub{font-size:11px;color:var(--tx2)}
+.lb-score{font-size:14px;font-weight:800;color:var(--pl);flex-shrink:0}
+.lb-row.me-row{border-color:rgba(124,58,237,.4);background:rgba(124,58,237,.08)}
+
+/* ── PROFILE ── */
 .prof-hdr{background:linear-gradient(135deg,rgba(124,58,237,.2),rgba(236,72,153,.13));border:1px solid rgba(124,58,237,.28);border-radius:var(--rxl);padding:24px;text-align:center;margin-bottom:18px}
-.prof-av{width:72px;height:72px;background:linear-gradient(135deg,var(--primary),var(--pink));border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 12px;box-shadow:0 8px 24px var(--primary-g)}
-.prof-n{font-size:20px;font-weight:800;margin-bottom:4px}
-.prof-l{font-size:13px;color:var(--primary-l);margin-bottom:18px}
+.prof-av{width:72px;height:72px;background:linear-gradient(135deg,var(--p),var(--pk));border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 12px;box-shadow:0 8px 24px var(--pg)}
+.prof-n{font-size:20px;font-weight:800;margin-bottom:3px}
+.prof-un{font-size:13px;color:var(--tx2);margin-bottom:6px}
+.prof-lv{font-size:13px;color:var(--pl)}
 .prof-sg{display:grid;grid-template-columns:repeat(3,1fr);gap:11px;margin-bottom:18px}
-.psc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px 8px;text-align:center}
-.psv{font-size:22px;font-weight:900;display:block;margin-bottom:3px}
-.psl{font-size:11px;color:var(--text2)}
+.psc{background:var(--sur);border:1px solid var(--bd);border-radius:var(--r);padding:14px 8px;text-align:center}
+.psv{font-size:20px;font-weight:900;display:block;margin-bottom:3px}
+.psl{font-size:11px;color:var(--tx2)}
 
-/* ─── DETAIL OVERLAY ─── */
-#det{position:fixed;inset:0;z-index:200;background:rgba(4,4,14,.98);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);opacity:0;pointer-events:none;transition:opacity .25s;overflow-y:auto;-webkit-overflow-scrolling:touch}
+/* inner tabs */
+.itabs{display:flex;gap:8px;margin-bottom:16px}
+.itab{flex:1;padding:9px;border-radius:12px;font-size:12px;font-weight:700;font-family:var(--font);cursor:pointer;border:1px solid var(--bd);background:var(--sur2);color:var(--tx2);transition:all .15s;text-align:center}
+.itab.active{background:rgba(124,58,237,.2);border-color:rgba(124,58,237,.5);color:var(--pl)}
+
+/* ── DETAIL OVERLAY ── */
+#det{position:fixed;inset:0;z-index:200;background:rgba(4,4,14,.98);backdrop-filter:blur(24px);opacity:0;pointer-events:none;transition:opacity .25s;overflow-y:auto;-webkit-overflow-scrolling:touch}
 #det.open{opacity:1;pointer-events:all}
-.det-hdr{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(4,4,14,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
-.back-btn{width:44px;height:44px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s}
+.det-hdr{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:rgba(4,4,14,.82);backdrop-filter:blur(16px);border-bottom:1px solid var(--bd)}
+.back-btn{width:44px;height:44px;background:var(--sur2);border:1px solid var(--bd);border-radius:12px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .15s}
 .back-btn:active{transform:scale(.92)}
-.back-btn svg{width:20px;height:20px;stroke:var(--text2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-.det-title{font-size:16px;font-weight:800}
+.back-btn svg{width:20px;height:20px;stroke:var(--tx2);fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.det-ttl{font-size:16px;font-weight:800}
 .det-body{padding:20px 16px 36px}
-.det-hero{text-align:center;margin-bottom:26px}
 .det-name{font-size:24px;font-weight:900;margin-bottom:4px}
-.det-info{font-size:13px;color:var(--text2);margin-bottom:12px}
+.det-inf{font-size:13px;color:var(--tx2);margin-bottom:12px}
 .det-bdg{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap}
-.sick-b{display:inline-flex;align-items:center;gap:4px;background:rgba(239,68,68,.14);border:1px solid rgba(239,68,68,.4);border-radius:20px;padding:3px 9px;font-size:11px;font-weight:700;color:#FCA5A5}
 .mood-b{font-size:13px;font-weight:700}
-
-/* STAT ROWS */
 .dsr{display:flex;align-items:center;gap:12px;margin-bottom:12px}
-.dsl{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--text2);width:68px;flex-shrink:0}
+.dsl{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--tx2);width:68px;flex-shrink:0}
 .dsb{flex:1}
 .dsb .pt{height:9px}
 .dsv{font-size:12px;font-weight:700;width:32px;text-align:left;flex-shrink:0}
-
-/* ACTIONS */
 .ag2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.act-btn{display:flex;align-items:center;gap:10px;padding:14px;border-radius:var(--r);cursor:pointer;border:1px solid var(--border);background:var(--surface);transition:all .15s;font-family:var(--font);text-align:right;width:100%}
+.act-btn{display:flex;align-items:center;gap:10px;padding:14px;border-radius:var(--r);cursor:pointer;border:1px solid var(--bd);background:var(--sur);transition:all .15s;font-family:var(--font);text-align:right;width:100%}
 .act-btn:active{transform:scale(.95)}
+.act-btn:disabled{opacity:.5;pointer-events:none}
 .act-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .act-info{flex:1;text-align:right}
 .act-n{font-size:13px;font-weight:700;display:block}
-.act-c{font-size:11px;color:var(--gold-l)}
-.a-feed .act-ico{background:rgba(249,115,22,.18)}
-.a-play .act-ico{background:rgba(236,72,153,.18)}
-.a-meds .act-ico{background:rgba(16,185,129,.18)}
-.a-cln  .act-ico{background:rgba(6,182,212,.18)}
-.a-feed:active{border-color:rgba(249,115,22,.5)}
-.a-play:active{border-color:rgba(236,72,153,.5)}
-.a-meds:active{border-color:rgba(16,185,129,.5)}
-.a-cln:active {border-color:rgba(6,182,212,.5)}
+.act-c{font-size:11px;color:var(--gol)}
+.a-fd .act-ico{background:rgba(249,115,22,.18)}
+.a-pl .act-ico{background:rgba(236,72,153,.18)}
+.a-md .act-ico{background:rgba(16,185,129,.18)}
+.a-cl .act-ico{background:rgba(6,182,212,.18)}
+.a-fd:active{border-color:rgba(249,115,22,.5)}
+.a-pl:active{border-color:rgba(236,72,153,.5)}
+.a-md:active{border-color:rgba(16,185,129,.5)}
+.a-cl:active{border-color:rgba(6,182,212,.5)}
 
-/* INFO ROWS */
-.ir{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+/* ── INFO ROWS ── */
+.ir{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--bd)}
 .ir:last-child{border-bottom:none}
-.ir-l{font-size:13px;color:var(--text2)}
+.ir-l{font-size:13px;color:var(--tx2)}
 .ir-v{font-size:13px;font-weight:700}
 
-/* LOADER */
+/* ── EMPTY / LOADER ── */
 .loader{display:flex;align-items:center;justify-content:center;padding:48px}
-.spin{width:34px;height:34px;border:3px solid rgba(124,58,237,.2);border-top-color:var(--primary);border-radius:50%;animation:spin .8s linear infinite}
+.spin{width:34px;height:34px;border:3px solid rgba(124,58,237,.2);border-top-color:var(--p);border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-
-/* EMPTY STATE */
-.es{text-align:center;padding:56px 20px;grid-column:1/-1}
-.es-em{font-size:60px;display:block;margin-bottom:14px}
+.es{text-align:center;padding:50px 20px;grid-column:1/-1}
+.es-em{font-size:56px;display:block;margin-bottom:14px}
 .es-t{font-size:17px;font-weight:800;margin-bottom:8px}
-.es-s{font-size:13px;color:var(--text2)}
+.es-s{font-size:13px;color:var(--tx2)}
 
-/* TOAST */
-#toast{position:fixed;bottom:calc(var(--nav-h) + 14px);left:50%;transform:translateX(-50%) translateY(16px);z-index:1000;background:rgba(10,10,36,.97);border:1px solid var(--border2);border-radius:14px;padding:11px 20px;font-size:13px;font-weight:600;white-space:nowrap;pointer-events:none;opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);backdrop-filter:blur(16px);max-width:calc(100vw - 32px);text-align:center}
+/* ── TOAST ── */
+#toast{position:fixed;bottom:calc(var(--nh) + 14px);left:50%;transform:translateX(-50%) translateY(16px);z-index:1000;background:rgba(10,10,36,.97);border:1px solid var(--bd2);border-radius:14px;padding:11px 20px;font-size:13px;font-weight:600;white-space:nowrap;pointer-events:none;opacity:0;transition:all .28s cubic-bezier(.34,1.56,.64,1);backdrop-filter:blur(16px);max-width:calc(100vw - 32px);text-align:center}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 #toast.ok{border-color:rgba(16,185,129,.5)}
 #toast.err{border-color:rgba(239,68,68,.5);color:#FCA5A5}
-#toast.warn{border-color:rgba(245,158,11,.5);color:var(--gold-l)}
-
-/* DIVIDER */
-.dv{height:1px;background:var(--border);margin:16px 0}
+#toast.warn{border-color:rgba(245,158,11,.5);color:var(--gol)}
+.dv{height:1px;background:var(--bd);margin:16px 0}
 </style>
 </head>
 <body>
-
-<!-- BG ORBS -->
 <div id="bg" aria-hidden="true"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div></div>
 
 <!-- HEADER -->
 <header id="hdr">
-  <div class="hdr-logo">
-    <div class="hdr-icon" aria-hidden="true">🦁</div>
-    <span class="hdr-name">ZooBoom</span>
+  <div class="logo">
+    <div class="logo-ico" aria-hidden="true">🦁</div>
+    <span class="logo-txt">ZooBoom</span>
   </div>
   <div class="coin-chip" aria-label="سکه‌های شما">
-    <span aria-hidden="true">🪙</span><span id="coins">---</span>
+    <span aria-hidden="true">🪙</span><span class="cv" id="coins">---</span>
   </div>
 </header>
 
@@ -308,9 +304,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     <div class="pi">
       <div class="sw">
         <svg class="s-ico" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        <input type="text" class="si" id="a-search" placeholder="جستجو..." aria-label="جستجوی حیوان" oninput="doFilter()">
+        <input type="text" class="sinp" id="a-srch" placeholder="جستجو در حیوانات..." aria-label="جستجو" oninput="doFilter()">
       </div>
-      <div class="chips" role="tablist" aria-label="فیلتر">
+      <div class="chips" role="tablist">
         <button class="chip active" data-f="all"     onclick="setChip(this,'all')"     role="tab" aria-selected="true">همه</button>
         <button class="chip"        data-f="dog"     onclick="setChip(this,'dog')"     role="tab" aria-selected="false">🐕 سگ</button>
         <button class="chip"        data-f="cat"     onclick="setChip(this,'cat')"     role="tab" aria-selected="false">🐈 گربه</button>
@@ -322,34 +318,20 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     </div>
   </section>
 
-  <!-- ADD -->
-  <section class="page" id="p-add" aria-label="افزودن حیوان">
-    <div class="pi">
-      <div class="empty-zoo">
-        <span class="ez-em">🐾</span>
-        <div class="ez-t">افزودن حیوان جدید</div>
-        <p class="ez-s">برای افزودن حیوان از منو ربات تلگرام استفاده کن</p>
-      </div>
-    </div>
-  </section>
-
   <!-- SHOP -->
   <section class="page" id="p-shop" aria-label="فروشگاه">
     <div class="pi">
-      <div class="shop-feat">
-        <span class="sf-em">🎁</span>
-        <div class="sf-t">پک ویژه</div>
-        <p class="sf-s">بهترین آیتم‌ها برای مراقبت از حیوانات</p>
-        <button class="btn btn-g btn-lg" onclick="toast('به زودی!','warn')">مشاهده پک</button>
-      </div>
-      <div class="sh"><div class="st">فروشگاه</div></div>
-      <div class="scats" role="tablist">
-        <button class="scat active" onclick="shopCat(this,'food')"        role="tab">غذا</button>
-        <button class="scat"        onclick="shopCat(this,'medicine')"    role="tab">دارو</button>
-        <button class="scat"        onclick="shopCat(this,'toys')"        role="tab">اسباب‌بازی</button>
-        <button class="scat"        onclick="shopCat(this,'accessories')" role="tab">لوازم</button>
-      </div>
-      <div class="sgrid" id="shop-grid"></div>
+      <div class="sh"><div class="st">فروشگاه</div><span class="sl" id="shop-coins-display"></span></div>
+      <div class="shop-cats" id="shop-cats" role="tablist"></div>
+      <div class="sgrid" id="shop-grid"><div class="loader" style="grid-column:1/-1"><div class="spin"></div></div></div>
+    </div>
+  </section>
+
+  <!-- LEADERBOARD -->
+  <section class="page" id="p-lb" aria-label="جدول امتیازات">
+    <div class="pi">
+      <div class="sh"><div class="st">برترین‌ها</div></div>
+      <div id="lb-list"><div class="loader"><div class="spin"></div></div></div>
     </div>
   </section>
 
@@ -360,7 +342,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
 </main>
 
 <!-- NAV -->
-<nav id="nav" aria-label="منو">
+<nav id="nav" aria-label="منو اصلی">
   <button class="nb active" onclick="go('home',this)" aria-label="خانه" aria-current="page">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     <span class="nl">خانه</span>
@@ -369,17 +351,15 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
     <span class="nl">حیوانات</span>
   </button>
-  <button class="nb add-btn" onclick="go('add',this)" aria-label="افزودن">
-    <div class="add-circle" aria-hidden="true">
-      <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-    </div>
-    <span class="nl">افزودن</span>
-  </button>
   <button class="nb" onclick="go('shop',this)" aria-label="فروشگاه">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
     <span class="nl">فروشگاه</span>
   </button>
-  <button class="nb" onclick="go('me',this)" aria-label="من">
+  <button class="nb" onclick="go('lb',this)" aria-label="جدول امتیازات">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    <span class="nl">برترین‌ها</span>
+  </button>
+  <button class="nb" onclick="go('me',this)" aria-label="پروفایل">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     <span class="nl">من</span>
   </button>
@@ -391,141 +371,143 @@ html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--text);fon
     <button class="back-btn" onclick="closeDet()" aria-label="بازگشت">
       <svg viewBox="0 0 24 24" aria-hidden="true"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
     </button>
-    <span class="det-title" id="det-ttl">جزئیات</span>
+    <span class="det-ttl" id="det-ttl">جزئیات</span>
     <div style="width:44px"></div>
   </div>
   <div class="det-body" id="det-body"></div>
 </div>
 
-<!-- TOAST -->
 <div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <script>
-/* ── CONSTANTS ── */
+/* ── SPECIES MAP ── */
 const SP = {
-  dog:{name:'سگ',emoji:'🐕',sound:'واق واق'},cat:{name:'گربه',emoji:'🐈',sound:'میو میو'},
-  rabbit:{name:'خرگوش',emoji:'🐇',sound:'اوق اوق'},hamster:{name:'همستر',emoji:'🐹',sound:'ویک ویک'},
-  parrot:{name:'طوطی',emoji:'🦜',sound:'جیک جیک'},lion:{name:'شیر',emoji:'🦁',sound:'غرررر'},
-  tiger:{name:'ببر',emoji:'🐯',sound:'غررر'},bear:{name:'خرس',emoji:'🐻',sound:'گررر'},
-  fox:{name:'روباه',emoji:'🦊',sound:'وووف'},wolf:{name:'گرگ',emoji:'🐺',sound:'ووووو'},
-  penguin:{name:'پنگوئن',emoji:'🐧',sound:'وک وک'},elephant:{name:'فیل',emoji:'🐘',sound:'پررر'},
+  dog:{n:'سگ',e:'🐕',s:'واق واق'},cat:{n:'گربه',e:'🐈',s:'میو میو'},
+  rabbit:{n:'خرگوش',e:'🐇',s:'اوق اوق'},hamster:{n:'همستر',e:'🐹',s:'ویک ویک'},
+  parrot:{n:'طوطی',e:'🦜',s:'جیک جیک'},lion:{n:'شیر',e:'🦁',s:'غرررر'},
+  tiger:{n:'ببر',e:'🐯',s:'غررر'},bear:{n:'خرس',e:'🐻',s:'گررر'},
+  fox:{n:'روباه',e:'🦊',s:'وووف'},wolf:{n:'گرگ',e:'🐺',s:'ووووو'},
+  penguin:{n:'پنگوئن',e:'🐧',s:'وک وک'},elephant:{n:'فیل',e:'🐘',s:'پررر'},
+  fish:{n:'ماهی',e:'🐟',s:'...'},turtle:{n:'لاک‌پشت',e:'🐢',s:'...'},
+  duck:{n:'اردک',e:'🦆',s:'قوقو'},frog:{n:'قورباغه',e:'🐸',s:'قور قور'},
+  cow:{n:'گاو',e:'🐄',s:'ماو'},sheep:{n:'گوسفند',e:'🐑',s:'بِ بِ'},
+  horse:{n:'اسب',e:'🐴',s:'شیهه'},cricket:{n:'جیرجیرک',e:'🦗',s:'جیر جیر'},
 };
-const RN = {common:'معمولی',uncommon:'غیرمعمول',rare:'نادر',epic:'حماسی',legendary:'افسانه‌ای',mythic:'اسطوره‌ای'};
-const RC = {common:'#64748B',uncommon:'#22C55E',rare:'#3B82F6',epic:'#A855F7',legendary:'#F59E0B',mythic:'#EC4899'};
-const SHOP_ITEMS = {
-  food:[
-    {emoji:'🥩',name:'گوشت تازه',price:15},{emoji:'🐟',name:'ماهی تازه',price:12},
-    {emoji:'🥕',name:'هویج شیرین',price:8},{emoji:'🌽',name:'ذرت بوداده',price:10},
-  ],
-  medicine:[
-    {emoji:'💊',name:'آنتی‌بیوتیک',price:50},{emoji:'🩹',name:'پانسمان',price:30},
-    {emoji:'💉',name:'واکسن',price:80},{emoji:'🌡️',name:'دماسنج',price:25},
-  ],
-  toys:[
-    {emoji:'🎾',name:'توپ بازی',price:20},{emoji:'🧸',name:'عروسک',price:25},
-    {emoji:'🎪',name:'تونل بازی',price:35},{emoji:'🪃',name:'چوب پرتاب',price:18},
-  ],
-  accessories:[
-    {emoji:'🎀',name:'ریبون رنگی',price:15},{emoji:'⭐',name:'گردنبند ستاره',price:45},
-    {emoji:'🏠',name:'خانه کوچک',price:60},{emoji:'🛁',name:'وان حمام',price:35},
-  ],
-};
+const RN={common:'معمولی',uncommon:'غیرمعمول',rare:'نادر',epic:'حماسی',legendary:'افسانه‌ای',mythic:'اسطوره‌ای'};
+const RC={common:'#64748B',uncommon:'#22C55E',rare:'#3B82F6',epic:'#A855F7',legendary:'#F59E0B',mythic:'#EC4899'};
+const RS={common:'s-c',uncommon:'s-u',rare:'s-r',epic:'s-e',legendary:'s-l',mythic:'s-m'};
+const CAT_LBL={food:'غذا',hygiene:'بهداشت',medicine:'دارو',toy:'اسباب‌بازی',accessory:'لوازم',habitat:'محل زندگی',gift:'هدیه'};
 
 /* ── STATE ── */
-const S = {
-  tg: window.Telegram?.WebApp,
-  initData: window.Telegram?.WebApp?.initData || '',
-  user: null, animals: [], farm: null, shopCat: 'food', filter: 'all', search: '',
+const S={
+  tg:window.Telegram?.WebApp,
+  initData:window.Telegram?.WebApp?.initData||'',
+  user:null, animals:[], farm:null,
+  shopItems:[], shopCat:'', inv:[],
+  lbData:[], lbLoaded:false,
+  filter:'all', search:'',
+  meTab:'profile',
 };
 
 /* ── API ── */
-async function req(path, method='GET', body=null) {
-  const o = {method,headers:{'Content-Type':'application/json','X-Telegram-Init-Data':S.initData}};
-  if (body) o.body = JSON.stringify(body);
-  const r = await fetch('/api/zoo' + path, o);
-  if (!r.ok) {const e=await r.json().catch(()=>({detail:'خطا'})); throw new Error(e.detail||'خطا');}
+async function req(path,method='GET',body=null){
+  const o={method,headers:{'Content-Type':'application/json','X-Telegram-Init-Data':S.initData}};
+  if(body) o.body=JSON.stringify(body);
+  const r=await fetch('/api/zoo'+path,o);
+  if(!r.ok){const e=await r.json().catch(()=>({detail:'خطا'}));throw new Error(e.detail||'خطا');}
   return r.json();
 }
 
 /* ── INIT ── */
-async function init() {
-  if (S.tg) {
+async function init(){
+  if(S.tg){
     S.tg.ready(); S.tg.expand();
-    try{S.tg.setHeaderColor('#04040E'); S.tg.setBackgroundColor('#04040E');}catch(e){}
+    try{S.tg.setHeaderColor('#04040E');S.tg.setBackgroundColor('#04040E');}catch(e){}
   }
-  try {
-    const tgu = S.tg?.initDataUnsafe?.user;
-    if (tgu) {
+  try{
+    const tgu=S.tg?.initDataUnsafe?.user;
+    if(tgu){
       await req('/user/register','POST',{
-        user_id:tgu.id, username:tgu.username||'',
+        user_id:tgu.id,
+        username:tgu.username||'',
         full_name:[tgu.first_name,tgu.last_name].filter(Boolean).join(' '),
       }).catch(()=>{});
     }
-    const [u,f,a] = await Promise.all([req('/user'), req('/farm'), req('/animals')]);
-    S.user=u; S.farm=f; S.animals=Array.isArray(a)?a:[];
-    updateCoins(); renderHome(); renderAnimals(); renderShop('food'); renderMe();
-  } catch(err) {
-    renderHome(true); renderAnimals(); renderShop('food'); renderMe();
+    const [u,f,a,shop]=await Promise.all([
+      req('/user'), req('/farm'), req('/animals'), req('/shop'),
+    ]);
+    S.user=u; S.farm=f;
+    S.animals=Array.isArray(a)?a:[];
+    S.shopItems=Array.isArray(shop)?shop:[];
+    updateCoins(); renderHome(); renderAnimals(); renderShop(); renderMe();
+  }catch(err){
+    renderHome(true); renderAnimals(); renderShop(); renderMe();
   }
 }
 
-/* ── HEADER ── */
-function updateCoins() {
-  document.getElementById('coins').textContent = fa(S.user?.coins??0);
+/* ── COINS ── */
+function updateCoins(){
+  const v=S.user?.coins??0;
+  document.getElementById('coins').textContent=fa(v);
+  const sd=document.getElementById('shop-coins-display');
+  if(sd) sd.textContent='🪙 '+fa(v);
 }
 
 /* ── NAV ── */
-function go(name, btn) {
-  document.querySelectorAll('.page').forEach(p=>{p.classList.remove('active');});
+function go(name,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.querySelectorAll('.nb').forEach(b=>{b.classList.remove('active');b.removeAttribute('aria-current');});
   document.getElementById('p-'+name)?.classList.add('active');
   if(btn){btn.classList.add('active');btn.setAttribute('aria-current','page');}
   haptic('light');
+  if(name==='lb'&&!S.lbLoaded) loadLB();
 }
 
 /* ── HOME ── */
-function renderHome(err) {
-  const c = document.getElementById('home-body');
-  const u = S.user, f = S.farm;
-  if (!u && !err) {c.innerHTML='<div class="loader"><div class="spin"></div></div>';return;}
-  if (!u) {
-    c.innerHTML=`<div class="empty-zoo"><span class="ez-em">🦁</span><div class="ez-t">خوش اومدی!</div><p class="ez-s">از طریق تلگرام وارد شو تا باغ‌وحشت رو ببینی</p></div>`;
+function renderHome(err){
+  const c=document.getElementById('home-body');
+  const u=S.user, f=S.farm;
+  if(!u&&!err){c.innerHTML='<div class="loader"><div class="spin"></div></div>';return;}
+  if(!u){
+    c.innerHTML=`<div class="es"><span class="es-em">🦁</span><div class="es-t">خوش اومدی!</div><p class="es-s">از طریق تلگرام وارد شو</p></div>`;
     return;
   }
-  const tgu = S.tg?.initDataUnsafe?.user;
-  const dname = tgu?.first_name || u.full_name || u.username || 'میهمان';
-  const cnt = u.animals_count ?? S.animals.length;
-  const wxIco = {sunny:'☀️',cloudy:'☁️',rainy:'🌧️',stormy:'⛈️',snowy:'❄️',windy:'💨',foggy:'🌫️',hot:'🌡️'}[f?.weather?.type]||'🌤️';
-  const claimed = f?.daily_bonus?.claimed;
-  const qs = S.animals.slice(0,5);
+  const tgu=S.tg?.initDataUnsafe?.user;
+  const dname=tgu?.first_name||(u.full_name?.split(' ')[0])||u.username||'کاربر';
+  const cnt=S.animals.length;
+  const WX={sunny:'☀️',cloudy:'☁️',rainy:'🌧️',stormy:'⛈️',snowy:'❄️',windy:'💨',foggy:'🌫️',hot:'🌡️'};
+  const wxIco=WX[f?.weather?.type]||'🌤️';
+  const claimed=f?.daily_bonus?.claimed;
+  const qs=S.animals.slice(0,6);
 
   c.innerHTML=`
 <div class="banner">
-  <div class="bn-title">سلام، ${dname}!</div>
-  <p class="bn-sub">به باغ‌وحش رویاییت خوش آمدی 🎉</p>
+  <div class="bn-t">سلام، ${dname}! 👋</div>
+  <p class="bn-s">به باغ‌وحش رویاییت خوش آمدی</p>
   <div class="bn-stats">
     <div><div class="bn-sv">${fa(cnt)}</div><div class="bn-sl">حیوان</div></div>
-    <div><div class="bn-sv">${fa(u.coins??0)}</div><div class="bn-sl">سکه</div></div>
+    <div><div class="bn-sv">${fa(u.coins??0)}</div><div class="bn-sl">🪙 سکه</div></div>
     <div><div class="bn-sv">${fa(u.level??1)}</div><div class="bn-sl">سطح</div></div>
+    <div><div class="bn-sv">${fa(u.total_score??0)}</div><div class="bn-sl">امتیاز</div></div>
   </div>
 </div>
 ${!claimed?`
 <div class="daily">
   <div class="daily-ico" aria-hidden="true">🎁</div>
-  <div class="daily-info">
+  <div class="daily-info" style="flex:1">
     <div class="daily-t">جایزه روزانه</div>
-    <div class="daily-s">۱۰۰ سکه رایگان!</div>
+    <div class="daily-s">۱۰۰ سکه رایگان − فقط یه بار در روز</div>
   </div>
-  <button class="btn btn-g btn-sm" onclick="claimDaily(this)" aria-label="دریافت جایزه">دریافت</button>
+  <button class="btn bg bsm" onclick="claimDaily(this)" aria-label="دریافت جایزه روزانه">دریافت</button>
 </div>`:`
 <div class="daily" style="opacity:.55">
   <div class="daily-ico" aria-hidden="true">✅</div>
-  <div class="daily-info">
-    <div class="daily-t">جایزه گرفته شد</div>
+  <div style="flex:1">
+    <div class="daily-t">جایزه امروز گرفته شد</div>
     <div class="daily-s">فردا دوباره برگرد!</div>
   </div>
 </div>`}
-${f?.weather?`
+${f?.weather?.type?`
 <div class="wx">
   <span class="wx-ico" aria-hidden="true">${wxIco}</span>
   <div>
@@ -536,85 +518,82 @@ ${f?.weather?`
 ${qs.length?`
 <div class="sh">
   <div class="st">حیوانات من</div>
-  <span class="sl" onclick="go('animals',document.querySelectorAll('.nb')[1])" tabindex="0">همه →</span>
+  <span class="sl" tabindex="0" onclick="go('animals',document.querySelectorAll('.nb')[1])" onkeydown="if(event.key==='Enter')go('animals',document.querySelectorAll('.nb')[1])">همه →</span>
 </div>
-<div class="qa-scroll" aria-label="حیوانات">
-  ${qs.map(a=>{
-    const sp=SP[a.species]||{emoji:'🐾',name:a.species};
-    const h=a.health??100;
-    const hc=h>=70?'#10B981':h>=40?'#F59E0B':'#EF4444';
-    return `<div class="qa" onclick="openDet(${a.animal_id})" tabindex="0" aria-label="${a.nickname||sp.name}">
-      <span class="qa-em" aria-hidden="true">${sp.emoji}</span>
-      <div class="qa-n">${a.nickname||sp.name}</div>
-      <div class="qa-hb"><div class="qa-hf" style="width:${h}%;background:${hc}"></div></div>
-    </div>`;
-  }).join('')}
-</div>`:`
-<div class="empty-zoo">
-  <span class="ez-em">🐾</span>
-  <div class="ez-t">باغ‌وحشت خالیه!</div>
-  <p class="ez-s">اولین حیوانت رو اضافه کن</p>
-  <button class="btn btn-p" onclick="go('add',document.querySelectorAll('.nb')[2])">افزودن حیوان</button>
+<div class="qa-sc" aria-label="حیوانات">${qs.map(qaCard).join('')}</div>`:`
+<div class="es">
+  <span class="es-em">🐾</span>
+  <div class="es-t">باغ‌وحشت خالیه!</div>
+  <p class="es-s">از ربات تلگرام اولین حیوانت رو انتخاب کن</p>
 </div>`}`;
 }
 
-async function claimDaily(btn) {
+function qaCard(a){
+  const sp=SP[a.species]||{e:'🐾',n:a.species};
+  const h=a.health??100;
+  const hc=h>=70?'#10B981':h>=40?'#F59E0B':'#EF4444';
+  return `<div class="qa" onclick="openDet(${a.animal_id})" tabindex="0" aria-label="${a.nickname||sp.n}" onkeydown="if(event.key==='Enter')openDet(${a.animal_id})">
+    <span class="qa-em" aria-hidden="true">${sp.e}</span>
+    <div class="qa-n">${a.nickname||sp.n}</div>
+    <div class="qa-hb" aria-label="سلامت ${h}٪"><div class="qa-hf" style="width:${h}%;background:${hc}"></div></div>
+  </div>`;
+}
+
+/* ── DAILY BONUS ── */
+async function claimDaily(btn){
   btn.disabled=true; btn.textContent='...';
-  try {
+  try{
     const r=await req('/farm/daily-bonus','POST');
     if(S.user) S.user.coins=r.total_coins;
     if(S.farm?.daily_bonus) S.farm.daily_bonus.claimed=true;
     updateCoins(); renderHome();
-    toast(`✅ ${fa(r.bonus_coins)} سکه دریافت شد!`,'ok');
-    haptic('success');
-  } catch(e) {
-    toast('❌ '+e.message,'err');
+    toast(`✅ ${fa(r.bonus_coins)} سکه دریافت شد!`,'ok'); haptic('success');
+  }catch(e){
+    toast('❌ '+e.message,'err'); haptic('error');
     btn.disabled=false; btn.textContent='دریافت';
   }
 }
 
-/* ── ANIMALS ── */
-function renderAnimals() {
-  const g = document.getElementById('a-grid');
-  const q = S.search.toLowerCase();
-  let list = S.animals;
-  if (S.filter==='sick') list=list.filter(a=>a.is_sick);
-  else if (S.filter!=='all') list=list.filter(a=>a.species===S.filter);
-  if (q) list=list.filter(a=>{
+/* ── ANIMALS PAGE ── */
+function renderAnimals(){
+  const g=document.getElementById('a-grid');
+  const q=S.search.toLowerCase();
+  let list=S.animals;
+  if(S.filter==='sick') list=list.filter(a=>a.is_sick);
+  else if(S.filter!=='all') list=list.filter(a=>a.species===S.filter);
+  if(q) list=list.filter(a=>{
     const sp=SP[a.species];
-    return (a.nickname||'').toLowerCase().includes(q)||(sp?.name||'').includes(q);
+    return (a.nickname||'').toLowerCase().includes(q)||(sp?.n||'').toLowerCase().includes(q);
   });
-  if (!list.length) {
+  if(!list.length){
     g.innerHTML=`<div class="es"><span class="es-em">🔍</span><div class="es-t">چیزی پیدا نشد</div><p class="es-s">فیلتر دیگری امتحان کن</p></div>`;
     return;
   }
-  g.innerHTML=list.map(a=>aCard(a)).join('');
+  g.innerHTML=list.map(aCard).join('');
 }
 
-function aCard(a) {
-  const sp=SP[a.species]||{emoji:'🐾',name:a.species};
-  const r=rarity(a), rc2=RC[r]||'#64748B';
-  const h=a.health??100, C=2*Math.PI*36, off=C*(1-h/100);
-  return `<div class="acard ${r}-b" onclick="openDet(${a.animal_id})" role="button" tabindex="0"
-    aria-label="${a.nickname||sp.name}, سطح ${a.level}" onkeydown="if(event.key==='Enter')openDet(${a.animal_id})">
+function aCard(a){
+  const sp=SP[a.species]||{e:'🐾',n:a.species};
+  const rv=rar(a); const rc=RC[rv]||'#64748B'; const rs=RS[rv]||'s-c';
+  const h=a.health??100; const C=2*Math.PI*36; const off=C*(1-h/100);
+  return `<div class="ac ${rs}" onclick="openDet(${a.animal_id})" role="button" tabindex="0" aria-label="${a.nickname||sp.n}, سطح ${a.level}" onkeydown="if(event.key==='Enter')openDet(${a.animal_id})">
   <div class="acb">
     <div class="aring" aria-hidden="true">
       <div class="ring-w">
         <svg class="ring-svg" width="88" height="88" viewBox="0 0 88 88">
-          <circle class="ring-track" cx="44" cy="44" r="36" stroke-width="6"/>
-          <circle class="ring-fill" cx="44" cy="44" r="36"
-            stroke="${rc2}" stroke-width="6"
+          <circle class="ring-t" cx="44" cy="44" r="36" stroke-width="6"/>
+          <circle class="ring-f" cx="44" cy="44" r="36" stroke="${rc}" stroke-width="6"
             stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
-            style="filter:drop-shadow(0 0 5px ${rc2})"/>
+            style="filter:drop-shadow(0 0 5px ${rc})"/>
         </svg>
-        <span style="position:absolute;font-size:32px;line-height:1">${sp.emoji}</span>
+        <span style="position:absolute;font-size:32px;line-height:1">${sp.e}</span>
       </div>
     </div>
     <div class="anrow">
-      <span class="aname">${a.nickname||sp.name}</span>
+      <span class="aname">${a.nickname||sp.n}</span>
       <span class="alv">⭐ ${fa(a.level)}</span>
     </div>
-    <div class="aspecies">${sp.name} · ${RN[r]||r}</div>
+    <div class="aspec">${sp.n} · ${RN[rv]||rv}</div>
     <div class="asm">
       ${smi('❤️',a.health??100,'ph')}
       ${smi('🍗',a.hunger??100,'phu')}
@@ -625,110 +604,104 @@ function aCard(a) {
   </div>
 </div>`;
 }
-function smi(ico,v,cls) {
-  return `<div class="smi"><span class="smi-i" aria-hidden="true">${ico}</span><div class="smi-b"><div class="pt" style="height:4px"><div class="pf ${cls}" style="width:${v}%;height:100%"></div></div></div></div>`;
+function smi(ico,v,cls){
+  return `<div class="smi"><span style="font-size:11px" aria-hidden="true">${ico}</span><div class="smi-b"><div class="pt" style="height:4px"><div class="pf ${cls}" style="width:${v}%;height:100%"></div></div></div></div>`;
 }
-
-function doFilter() {S.search=document.getElementById('a-search').value; renderAnimals();}
+function doFilter(){S.search=document.getElementById('a-srch').value;renderAnimals();}
 function setChip(el,f){
   document.querySelectorAll('.chip').forEach(c=>{c.classList.remove('active');c.setAttribute('aria-selected','false');});
-  el.classList.add('active'); el.setAttribute('aria-selected','true');
+  el.classList.add('active');el.setAttribute('aria-selected','true');
   S.filter=f; renderAnimals(); haptic('light');
 }
 
 /* ── DETAIL ── */
-async function openDet(id) {
+async function openDet(id){
   const ov=document.getElementById('det');
   document.getElementById('det-body').innerHTML='<div class="loader"><div class="spin"></div></div>';
   ov.classList.add('open');
-  if(S.tg?.BackButton){S.tg.BackButton.show(); S.tg.BackButton.onClick(closeDet);}
+  if(S.tg?.BackButton){S.tg.BackButton.show();S.tg.BackButton.onClick(closeDet);}
   haptic('light');
-  try {
-    renderDet(await req('/animals/'+id));
-  } catch(e) {
+  try{renderDet(await req('/animals/'+id));}
+  catch(e){
     const c=S.animals.find(a=>a.animal_id===id);
-    c ? renderDet(c) : (document.getElementById('det-body').innerHTML=`<div class="es"><span class="es-em">❌</span><div class="es-t">خطا</div><p class="es-s">${e.message}</p></div>`);
+    c?renderDet(c):(document.getElementById('det-body').innerHTML=`<div class="es"><span class="es-em">❌</span><div class="es-t">خطا</div><p class="es-s">${e.message}</p></div>`);
   }
 }
 
-function renderDet(a) {
-  const sp=SP[a.species]||{emoji:'🐾',name:a.species,sound:'...'};
-  const r=rarity(a), rc2=RC[r]||'#64748B';
-  const h=a.health??100, hu=a.hunger??100, ha=a.happiness??100, en=a.energy??100, cl=a.cleanliness??100;
+function renderDet(a){
+  const sp=SP[a.species]||{e:'🐾',n:a.species,s:'...'};
+  const rv=rar(a); const rc=RC[rv]||'#64748B';
+  const h=a.health??100,hu=a.hunger??100,ha=a.happiness??100,en=a.energy??100,cl=a.cleanliness??100;
   const avg=(h+ha+hu+en)/4;
   const mood=avg>=80?'😄 شاد':avg>=60?'🙂 خوب':hu<40?'😋 گرسنه':en<40?'😴 خسته':'😌 آرام';
-  const C=2*Math.PI*52, off=C*(1-h/100);
-  document.getElementById('det-ttl').textContent=a.nickname||sp.name;
+  const C=2*Math.PI*52; const off=C*(1-h/100);
+  document.getElementById('det-ttl').textContent=a.nickname||sp.n;
   document.getElementById('det-body').innerHTML=`
-<div class="det-hero">
-  <div style="display:flex;justify-content:center;margin-bottom:16px">
+<div style="text-align:center;margin-bottom:24px">
+  <div style="display:flex;justify-content:center;margin-bottom:14px">
     <div class="ring-w" aria-label="سلامت ${h}٪">
       <svg class="ring-svg" width="144" height="144" viewBox="0 0 144 144">
-        <circle class="ring-track" cx="72" cy="72" r="52" stroke-width="7"/>
-        <circle class="ring-fill" cx="72" cy="72" r="52"
-          stroke="${rc2}" stroke-width="7"
+        <circle class="ring-t" cx="72" cy="72" r="52" stroke-width="7"/>
+        <circle class="ring-f" cx="72" cy="72" r="52" stroke="${rc}" stroke-width="7"
           stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${off.toFixed(1)}"
-          style="filter:drop-shadow(0 0 10px ${rc2})"/>
+          style="filter:drop-shadow(0 0 10px ${rc})"/>
       </svg>
-      <span style="position:absolute;font-size:56px;line-height:1" aria-hidden="true">${sp.emoji}</span>
+      <span style="position:absolute;font-size:56px;line-height:1" aria-hidden="true">${sp.e}</span>
     </div>
   </div>
-  <div class="det-name">${a.nickname||sp.name}</div>
-  <div class="det-info">${sp.name} · سطح ${fa(a.level)} · ${sp.sound}</div>
+  <div class="det-name">${a.nickname||sp.n}</div>
+  <div class="det-inf">${sp.n} · سطح ${fa(a.level)} · ${sp.s}</div>
   <div class="det-bdg">
-    <span class="rtag ${r[0]}${r.slice(1)}">${RN[r]||r}</span>
+    <span class="rtag ${getRarityClass(rv)}">${RN[rv]||rv}</span>
     ${a.is_sick?'<span class="sick-b">🤒 بیمار</span>':''}
     <span class="mood-b">${mood}</span>
   </div>
 </div>
-
 <div class="sh"><div class="st">وضعیت سلامت</div></div>
 ${dsr('❤️','سلامت',h,'ph','#10B981')}
 ${dsr('🍗','سیری',hu,'phu','#F97316')}
 ${dsr('😊','شادی',ha,'pp','#EC4899')}
 ${dsr('⚡','انرژی',en,'pe','#3B82F6')}
 ${dsr('🛁','تمیزی',cl,'pc','#06B6D4')}
-
 <div class="dv"></div>
 <div class="sh"><div class="st">مراقبت</div></div>
 <div class="ag2">
-  <button class="act-btn a-feed" onclick="doAct(${a.animal_id},'feed')" aria-label="غذا دادن - ۱۰ سکه">
+  <button class="act-btn a-fd" onclick="doAct(${a.animal_id},'feed')" aria-label="غذا دادن ۱۰ سکه">
     <div class="act-ico" aria-hidden="true">🍗</div>
     <div class="act-info"><span class="act-n">غذا دادن</span><span class="act-c">🪙 ۱۰ سکه</span></div>
   </button>
-  <button class="act-btn a-play" onclick="doAct(${a.animal_id},'play')" aria-label="بازی - ۵ سکه">
+  <button class="act-btn a-pl" onclick="doAct(${a.animal_id},'play')" aria-label="بازی ۵ سکه">
     <div class="act-ico" aria-hidden="true">🎾</div>
     <div class="act-info"><span class="act-n">بازی کردن</span><span class="act-c">🪙 ۵ سکه</span></div>
   </button>
-  <button class="act-btn a-meds" onclick="doAct(${a.animal_id},'medicine')" aria-label="دارو - ۵۰ سکه">
+  <button class="act-btn a-md" onclick="doAct(${a.animal_id},'medicine')" aria-label="دارو ۵۰ سکه">
     <div class="act-ico" aria-hidden="true">💊</div>
     <div class="act-info"><span class="act-n">دارو دادن</span><span class="act-c">🪙 ۵۰ سکه</span></div>
   </button>
-  <button class="act-btn a-cln" onclick="doAct(${a.animal_id},'clean')" aria-label="تمیز کردن - ۱۵ سکه">
+  <button class="act-btn a-cl" onclick="doAct(${a.animal_id},'clean')" aria-label="تمیز کردن ۱۵ سکه">
     <div class="act-ico" aria-hidden="true">🛁</div>
     <div class="act-info"><span class="act-n">تمیز کردن</span><span class="act-c">🪙 ۱۵ سکه</span></div>
   </button>
 </div>
-
 <div class="dv"></div>
 <div class="card" style="padding:16px">
   <div class="sh"><div class="st">اطلاعات</div></div>
-  <div class="ir"><span class="ir-l">نوع</span><span class="ir-v">${sp.name}</span></div>
-  <div class="ir"><span class="ir-l">نژاد</span><span class="ir-v">${a.breed||'—'}</span></div>
-  <div class="ir"><span class="ir-l">جنسیت</span><span class="ir-v">${a.gender==='male'?'♂️ نر':a.gender==='female'?'♀️ ماده':'—'}</span></div>
+  ${a.breed?`<div class="ir"><span class="ir-l">نژاد</span><span class="ir-v">${a.breed}</span></div>`:''}
+  ${a.color?`<div class="ir"><span class="ir-l">رنگ</span><span class="ir-v">${a.color}</span></div>`:''}
+  <div class="ir"><span class="ir-l">جنسیت</span><span class="ir-v">${a.gender||'—'}</span></div>
   <div class="ir"><span class="ir-l">امتیاز XP</span><span class="ir-v">${fa(a.xp??0)}</span></div>
+  <div class="ir"><span class="ir-l">سن (روز)</span><span class="ir-v">${fa(a.age_days??0)}</span></div>
+  ${a.habitat&&a.habitat!=='basic'?`<div class="ir"><span class="ir-l">محل زندگی</span><span class="ir-v">${a.habitat}</span></div>`:''}
 </div>`;
 }
-
-function dsr(ico,lbl,v,cls,color) {
+function dsr(ico,lbl,v,cls,color){
   return `<div class="dsr">
     <div class="dsl"><span aria-hidden="true">${ico}</span>${lbl}</div>
     <div class="dsb"><div class="pt" style="height:9px"><div class="pf ${cls}" style="width:${v}%;height:100%" role="progressbar" aria-valuenow="${v}" aria-valuemin="0" aria-valuemax="100" aria-label="${lbl}: ${v}٪"></div></div></div>
     <span class="dsv" style="color:${color}">${fa(v)}٪</span>
   </div>`;
 }
-
-function closeDet() {
+function closeDet(){
   document.getElementById('det').classList.remove('open');
   if(S.tg?.BackButton) S.tg.BackButton.hide();
   haptic('light');
@@ -737,88 +710,196 @@ function closeDet() {
 /* ── ACTIONS ── */
 const ACT_COST={feed:10,play:5,medicine:50,clean:15};
 const ACT_LBL={feed:'غذا دادن',play:'بازی',medicine:'دارو',clean:'تمیز کردن'};
-const ACT_EP={feed:'feed',play:'play',medicine:'medicine',clean:'clean'};
-
-async function doAct(id, act) {
+async function doAct(id,act){
   const cost=ACT_COST[act]||0;
-  if (S.user && (S.user.coins??0)<cost) {
-    toast(`❌ سکه کافی نیست (نیاز: ${fa(cost)})`,'err'); haptic('error'); return;
-  }
+  if(S.user&&(S.user.coins??0)<cost){toast(`❌ سکه کافی نیست (نیاز: ${fa(cost)})`,'err');haptic('error');return;}
   document.querySelectorAll('.act-btn').forEach(b=>b.disabled=true);
-  try {
-    const res=await req('/animals/'+id+'/'+ACT_EP[act],'POST');
+  try{
+    const res=await req('/animals/'+id+'/'+act,'POST');
     const ua=res.animal||res;
     const idx=S.animals.findIndex(a=>a.animal_id===id);
     if(idx>=0) S.animals[idx]={...S.animals[idx],...ua};
     if(S.user) S.user.coins=(S.user.coins??0)-cost;
     updateCoins(); renderDet(ua); renderAnimals();
     toast(`✅ ${ACT_LBL[act]} انجام شد!`,'ok'); haptic('success');
-  } catch(e) {
-    toast('❌ '+e.message,'err'); haptic('error');
-  }
+  }catch(e){toast('❌ '+e.message,'err');haptic('error');}
   document.querySelectorAll('.act-btn').forEach(b=>b.disabled=false);
 }
 
 /* ── SHOP ── */
-function renderShop(cat) {
-  if(cat) S.shopCat=cat;
-  const items=SHOP_ITEMS[S.shopCat]||[];
+function renderShop(){
+  if(!S.shopItems.length) return;
+  // build category tabs from real data
+  const cats=[...new Set(S.shopItems.map(i=>i.category))];
+  S.shopCat=S.shopCat&&cats.includes(S.shopCat)?S.shopCat:cats[0]||'food';
+  const catsEl=document.getElementById('shop-cats');
+  if(catsEl){
+    catsEl.innerHTML=cats.map(c=>`<button class="scat${c===S.shopCat?' active':''}" onclick="shopCat(this,'${c}')" role="tab" aria-selected="${c===S.shopCat}">${CAT_LBL[c]||c}</button>`).join('');
+  }
+  renderShopGrid();
+}
+function shopCat(btn,cat){
+  document.querySelectorAll('.scat').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false');});
+  btn.classList.add('active');btn.setAttribute('aria-selected','true');
+  S.shopCat=cat; renderShopGrid(); haptic('light');
+}
+function renderShopGrid(){
   const g=document.getElementById('shop-grid');
   if(!g) return;
-  g.innerHTML=items.map(it=>`
-<div class="si-card" onclick="buyItem('${it.name}',${it.price})" role="button" tabindex="0" aria-label="${it.name} - ${it.price} سکه" onkeydown="if(event.key==='Enter')buyItem('${it.name}',${it.price})">
-  <span class="si-em" aria-hidden="true">${it.emoji}</span>
-  <div class="si-n">${it.name}</div>
-  <div class="si-p"><span aria-hidden="true">🪙</span> ${fa(it.price)}</div>
-  <button class="btn btn-p btn-sm btn-fw" tabindex="-1" aria-hidden="true">خرید</button>
+  const list=S.shopItems.filter(i=>i.category===S.shopCat);
+  if(!list.length){g.innerHTML=`<div class="es" style="grid-column:1/-1"><span class="es-em">📦</span><div class="es-t">آیتمی نیست</div></div>`;return;}
+  g.innerHTML=list.map(i=>`
+<div class="si-card" onclick="buyItem(${i.item_id},'${i.name}',${i.price})" role="button" tabindex="0"
+  aria-label="${i.name} - ${i.price} سکه" onkeydown="if(event.key==='Enter')buyItem(${i.item_id},'${i.name}',${i.price})">
+  <span class="si-em" aria-hidden="true">${i.icon||'🎁'}</span>
+  <div class="si-n">${i.name}</div>
+  <div class="si-d">${i.description||''}</div>
+  <div class="si-p"><span aria-hidden="true">🪙</span> ${fa(i.price)}</div>
+  <button class="btn bp bsm bfw" tabindex="-1" aria-hidden="true">خرید</button>
 </div>`).join('');
 }
-function shopCat(btn,cat) {
-  document.querySelectorAll('.scat').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false');});
-  btn.classList.add('active'); btn.setAttribute('aria-selected','true');
-  renderShop(cat); haptic('light');
+async function buyItem(itemId,name,price){
+  if(!S.user){toast('❌ ابتدا وارد شو','err');return;}
+  if((S.user.coins??0)<price){toast(`❌ سکه کافی نیست (نیاز: ${fa(price)})`,'err');haptic('error');return;}
+  try{
+    const r=await req('/shop/buy','POST',{item_id:itemId});
+    S.user.coins=r.remaining_coins;
+    updateCoins();
+    toast(`✅ ${name} خریداری شد!`,'ok'); haptic('success');
+    // refresh inventory if on me page
+    if(S.meTab==='inventory') loadInventory();
+  }catch(e){toast('❌ '+e.message,'err');haptic('error');}
 }
-function buyItem(n,p) {
-  if(!S.user||(S.user.coins??0)<p){toast(`❌ سکه کافی نیست`,'err');haptic('error');return;}
-  toast(`✅ ${n} خریداری شد!`,'ok'); haptic('success');
+
+/* ── LEADERBOARD ── */
+async function loadLB(){
+  S.lbLoaded=true;
+  const el=document.getElementById('lb-list');
+  if(!el) return;
+  try{
+    S.lbData=await req('/leaderboard');
+    renderLB();
+  }catch(e){
+    el.innerHTML=`<div class="es"><span class="es-em">❌</span><div class="es-t">خطا در بارگذاری</div><p class="es-s">${e.message}</p></div>`;
+  }
+}
+function renderLB(){
+  const el=document.getElementById('lb-list');
+  if(!el||!S.lbData.length){
+    if(el) el.innerHTML=`<div class="es"><span class="es-em">📊</span><div class="es-t">هنوز داده‌ای نیست</div></div>`;
+    return;
+  }
+  const myId=S.user?.user_id;
+  el.innerHTML=S.lbData.map((u,i)=>{
+    const rank=i+1;
+    const rc2=rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
+    const isMe=u.user_id===myId;
+    const dname=u.full_name||u.username||`کاربر ${fa(u.user_id)}`;
+    const trophy=rank===1?'🥇':rank===2?'🥈':rank===3?'🥉':'';
+    return `<div class="lb-row${isMe?' me-row':''}" aria-label="${rank}. ${dname}">
+      <div class="lb-rank ${rc2}" aria-hidden="true">${trophy||fa(rank)}</div>
+      <div class="lb-av" aria-hidden="true">${dname.charAt(0)||'?'}</div>
+      <div class="lb-info">
+        <div class="lb-name">${dname}${isMe?' (شما)':''}</div>
+        <div class="lb-sub">سطح ${fa(u.level)} · ${fa(u.animal_count||0)} حیوان</div>
+      </div>
+      <div class="lb-score">${fa(u.total_score||0)}</div>
+    </div>`;
+  }).join('');
 }
 
 /* ── PROFILE ── */
-function renderMe() {
+function renderMe(){
   const c=document.getElementById('me-body');
   const u=S.user;
-  if(!u){c.innerHTML=`<div class="es"><span class="es-em">👤</span><div class="es-t">وارد نشده‌ای</div><p class="es-s">از طریق تلگرام وارد شو</p></div>`;return;}
+  if(!u){
+    c.innerHTML=`<div class="es"><span class="es-em">👤</span><div class="es-t">وارد نشده‌ای</div><p class="es-s">از طریق تلگرام وارد شو</p></div>`;
+    return;
+  }
   const tgu=S.tg?.initDataUnsafe?.user;
-  const dname=tgu?.first_name||u.full_name||u.username||'میهمان';
-  const uname=u.username?'@'+u.username:'';
-  const cnt=u.animals_count??S.animals.length;
+  const dname=tgu?.first_name||(u.full_name?.split(' ')[0])||u.username||'کاربر';
+  const fullname=u.full_name||(tgu?[tgu.first_name,tgu.last_name].filter(Boolean).join(' '):'');
+  const username=u.username?'@'+u.username:'';
+  const cnt=S.animals.length;
   c.innerHTML=`
 <div class="prof-hdr">
-  <div class="prof-av" aria-hidden="true">👤</div>
-  <div class="prof-n">${dname}</div>
-  ${uname?`<div class="prof-l">${uname}</div>`:''}
-  <div class="prof-l">سطح ${fa(u.level??1)}</div>
+  <div class="prof-av" aria-hidden="true">${dname.charAt(0)||'👤'}</div>
+  <div class="prof-n">${fullname||dname}</div>
+  ${username?`<div class="prof-un">${username}</div>`:''}
+  <div class="prof-lv">سطح ${fa(u.level??1)}</div>
 </div>
 <div class="prof-sg" role="list">
   <div class="psc" role="listitem"><span class="psv">${fa(u.coins??0)}</span><span class="psl">🪙 سکه</span></div>
   <div class="psc" role="listitem"><span class="psv">${fa(cnt)}</span><span class="psl">🐾 حیوان</span></div>
   <div class="psc" role="listitem"><span class="psv">${fa(u.total_score??0)}</span><span class="psl">⭐ امتیاز</span></div>
 </div>
-<div class="card" style="padding:16px;margin-bottom:14px">
-  <div class="sh"><div class="st">حساب کاربری</div></div>
-  <div class="ir"><span class="ir-l">شناسه</span><span class="ir-v">${fa(u.user_id)}</span></div>
-  <div class="ir"><span class="ir-l">سطح</span><span class="ir-v">${fa(u.level??1)}</span></div>
-  <div class="ir"><span class="ir-l">حیوانات</span><span class="ir-v">${fa(cnt)}</span></div>
+<div class="itabs" role="tablist">
+  <button class="itab${S.meTab==='profile'?' active':''}" onclick="meTab('profile',this)" role="tab" aria-selected="${S.meTab==='profile'}">پروفایل</button>
+  <button class="itab${S.meTab==='inventory'?' active':''}" onclick="meTab('inventory',this)" role="tab" aria-selected="${S.meTab==='inventory'}">انبار</button>
 </div>
-<div class="card" style="padding:16px">
-  <div class="sh"><div class="st">درباره برنامه</div></div>
-  <div class="ir"><span class="ir-l">نسخه</span><span class="ir-v">2.0</span></div>
-  <div class="ir"><span class="ir-l">تیم توسعه</span><span class="ir-v">ZooBoom</span></div>
+<div id="me-inner">${S.meTab==='profile'?profileContent(u):invContent()}</div>`;
+}
+
+function profileContent(u){
+  const tgu=S.tg?.initDataUnsafe?.user;
+  const country=u.country||'—';
+  const age=u.age?fa(u.age)+' سال':'—';
+  const regDate=u.registered_at?(new Date(u.registered_at)).toLocaleDateString('fa-IR'):'—';
+  return `<div class="card" style="padding:16px;margin-bottom:14px">
+  <div class="sh"><div class="st">اطلاعات حساب</div></div>
+  ${tgu?.id?`<div class="ir"><span class="ir-l">شناسه تلگرام</span><span class="ir-v">${fa(tgu.id)}</span></div>`:''}
+  ${u.full_name?`<div class="ir"><span class="ir-l">نام کامل</span><span class="ir-v">${u.full_name}</span></div>`:''}
+  ${u.username?`<div class="ir"><span class="ir-l">نام کاربری</span><span class="ir-v">@${u.username}</span></div>`:''}
+  <div class="ir"><span class="ir-l">سن</span><span class="ir-v">${age}</span></div>
+  <div class="ir"><span class="ir-l">کشور</span><span class="ir-v">${country}</span></div>
+  <div class="ir"><span class="ir-l">تاریخ عضویت</span><span class="ir-v">${regDate}</span></div>
+  <div class="ir"><span class="ir-l">سطح</span><span class="ir-v">${fa(u.level??1)}</span></div>
+  <div class="ir"><span class="ir-l">تعداد حیوانات</span><span class="ir-v">${fa(S.animals.length)}</span></div>
 </div>`;
 }
 
+function invContent(){
+  if(!S.inv.length) return `<div class="es"><span class="es-em">📦</span><div class="es-t">انبارت خالیه</div><p class="es-s">از فروشگاه خرید کن!</p></div>`;
+  const CATL={food:'غذا',hygiene:'بهداشت',medicine:'دارو',toy:'اسباب‌بازی',accessory:'لوازم',habitat:'محل زندگی',gift:'هدیه'};
+  const byCat={};
+  S.inv.forEach(i=>{if(!byCat[i.category]) byCat[i.category]=[];byCat[i.category].push(i);});
+  return Object.entries(byCat).map(([cat,items])=>`
+<div class="sh"><div class="st">${CATL[cat]||cat}</div></div>
+<div class="inv-grid" style="margin-bottom:16px">${items.map(i=>`
+<div class="inv-card">
+  <div class="inv-qty">×${fa(i.quantity)}</div>
+  <span class="inv-em" aria-hidden="true">${i.icon||'🎁'}</span>
+  <div class="inv-n">${i.name}</div>
+  <div class="inv-d">${i.description||''}</div>
+</div>`).join('')}</div>`).join('');
+}
+
+async function loadInventory(){
+  const inner=document.getElementById('me-inner');
+  if(inner) inner.innerHTML='<div class="loader"><div class="spin"></div></div>';
+  try{
+    S.inv=await req('/inventory');
+    const inner2=document.getElementById('me-inner');
+    if(inner2) inner2.innerHTML=invContent();
+  }catch(e){
+    const inner2=document.getElementById('me-inner');
+    if(inner2) inner2.innerHTML=`<div class="es"><span class="es-em">❌</span><div class="es-t">خطا</div><p class="es-s">${e.message}</p></div>`;
+  }
+}
+
+function meTab(tab,btn){
+  S.meTab=tab;
+  document.querySelectorAll('.itab').forEach(b=>{b.classList.remove('active');b.setAttribute('aria-selected','false');});
+  btn.classList.add('active');btn.setAttribute('aria-selected','true');
+  const inner=document.getElementById('me-inner');
+  if(!inner) return;
+  if(tab==='profile') inner.innerHTML=profileContent(S.user);
+  else loadInventory();
+  haptic('light');
+}
+
 /* ── HELPERS ── */
-function rarity(a) {
+function rar(a){
   const lv=a.level||1;
   if(lv>=20) return 'mythic';
   if(lv>=15) return 'legendary';
@@ -827,24 +908,31 @@ function rarity(a) {
   if(lv>=4)  return 'uncommon';
   return 'common';
 }
-function fa(n) {
+function getRarityClass(rv){
+  return {common:'rc',uncommon:'ru',rare:'rr',epic:'re',legendary:'rl',mythic:'rm'}[rv]||'rc';
+}
+function fa(n){
   if(n===null||n===undefined) return '۰';
   return String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
 }
 let _tt;
-function toast(msg,type='') {
+function toast(msg,type=''){
   const t=document.getElementById('toast');
   t.textContent=msg; t.className=type?`show ${type}`:'show';
-  clearTimeout(_tt); _tt=setTimeout(()=>{t.className=t.className.replace('show','').trim();},3000);
+  clearTimeout(_tt); _tt=setTimeout(()=>{t.className=t.className.replace('show','').trim();},3200);
 }
-function haptic(t) {
+function haptic(t){
   try{const f=S.tg?.HapticFeedback;if(!f)return;
     if(t==='light')f.impactOccurred('light');
-    if(t==='success')f.notificationOccurred('success');
-    if(t==='error')f.notificationOccurred('error');
+    else if(t==='success')f.notificationOccurred('success');
+    else if(t==='error')f.notificationOccurred('error');
   }catch(e){}
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeDet();});
+if(window.Telegram?.WebApp?.BackButton)
+  window.Telegram.WebApp.BackButton.onClick(()=>{
+    if(document.getElementById('det').classList.contains('open')) closeDet();
+  });
 
 /* ── START ── */
 init();

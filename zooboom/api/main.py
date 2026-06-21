@@ -6,7 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 
 from api.auth import verify_init_data
-from api.routers import user, animals, shop, farm
+from api.routers import user, animals, shop, farm, extra
 
 app = FastAPI(title="ZooBoom API", version="1.0.0")
 
@@ -56,3 +56,4 @@ app.include_router(user.router, prefix="/api/zoo")
 app.include_router(animals.router, prefix="/api/zoo")
 app.include_router(shop.router, prefix="/api/zoo")
 app.include_router(farm.router, prefix="/api/zoo")
+app.include_router(extra.router, prefix="/api/zoo")
